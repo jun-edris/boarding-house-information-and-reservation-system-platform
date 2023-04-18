@@ -1,0 +1,29 @@
+{
+	"name": "boarding-house-information-and-reservation-system-platform",
+	"version": "1.0.0",
+	"main": "/server/index.js",
+	"license": "MIT",
+	"scripts": {
+		"start": "cd ./server && node index.js",
+		"dev": "cd ./server && nodemon index.js",
+		"build": "yarn install && cd ./client && yarn install && yarn run build"
+	},
+	"dependencies": {
+		"axios": "^1.3.2",
+		"bcrypt": "^5.1.0",
+		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"express-jwt": "^8.3.0",
+		"jsonwebtoken": "^9.0.0",
+		"jwt-decode": "^3.1.2",
+		"mongoose": "^6.8.3",
+		"morgan": "^1.10.0",
+		"path": "^0.12.7",
+		"pusher": "^5.1.2"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.20"
+	}
+}

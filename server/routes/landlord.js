@@ -1,0 +1,158 @@
+const express = require('express');
+const landlordCtrl = require('../controllers/landlord/index');
+const {
+  checkJwt,
+  attachUser,
+  requireAuthenticated,
+} = require('../middlewares/userIdentification');
+const router = express.Router();
+
+router.get(
+  '/boardinghouse',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getUserBH
+);
+router.get(
+  '/boardinghouse/tenants',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getLandlordRoomTenants
+);
+router.get(
+  '/boardinghouse/tenants/to-live',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getTenantRequestToLiveReservation
+);
+router.get(
+  '/boardinghouse/tenants/to-leave',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getTenantRequestToLeaveReservation
+);
+router.get(
+  '/reservation/pending-to-accept',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getPendingToAccept
+);
+router.get(
+  '/reservation/pending-to-cancel',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getPendingToCancel
+);
+router.get(
+  '/reservation/reserved',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getReserved
+);
+router.get(
+  '/reservation/expired',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.getExpired
+);
+router.post(
+  '/boardinghouse',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.createBH
+);
+router.post(
+  '/room',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.createRoom
+);
+router.post(
+  '/notify/tenant',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.notifyTenant
+);
+router.patch(
+  '/room/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.updateRoom
+);
+router.patch(
+  '/boardinghouse/room/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.insertRoomToBH
+);
+router.patch(
+  '/boardinghouse/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.updateBH
+);
+router.patch(
+  '/boardinghouse/remove-room/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.removeRoomToBH
+);
+router.patch(
+  '/reservation/accept/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.acceptReservation
+);
+router.patch(
+  '/reservation/accept-leave/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.acceptLeaveBH
+);
+router.patch(
+  '/reservation/decline/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.declineReservation
+);
+router.patch(
+  '/reservation/leave/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.declineLeaveBH
+);
+router.delete(
+  '/boardinghouse/room/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.deleteRoom
+);
+router.delete(
+  '/notify/delete/landlord/:id',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.deleteNotifLandlord
+);
+
+module.exports = router;
