@@ -442,7 +442,18 @@ const BoardingHouseDetails = () => {
           <ReserveForm rooms={bHouse?.rooms} onClose={handleModalClose} />
         </DialogContainer>
       </div>
-      <ToastContainer theme="colored" />
+      <ToastContainer
+        position="top-right"
+        autoClose={100}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
     </>
   );
 };

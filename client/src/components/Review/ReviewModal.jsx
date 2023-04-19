@@ -185,7 +185,18 @@ const ReviewModal = ({ room, boardingHouse }) => {
           </Box>
         </DialogContent>
       </Dialog>
-      <ToastContainer theme="colored" />
+      <ToastContainer
+        position="top-right"
+        autoClose={100}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+      />
     </>
   );
 };
