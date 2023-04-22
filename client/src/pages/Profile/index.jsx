@@ -1,22 +1,35 @@
 import {
   Avatar,
   Box,
+  Button,
   Chip,
   Container,
   Grid,
   Paper,
   Typography,
 } from '@mui/material';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import DialogContainer from '../../components/common/DialogContainer';
+import RegisterForm from '../../components/AuthForm/Register/RegisterForm';
 
 const Profile = () => {
+  const [open, setOpen] = useState(false);
   const authContext = useContext(AuthContext);
+
+  const handleModalClose = () => {
+    setOpen(false);
+  };
 
   return (
     <>
       <Container maxWidth="lg" sx={{ mt: 5 }}>
-        <Paper elevation={0} variant="outlined" sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button variant="contained" onClick={() => setOpen(true)}>
+            Update Details
+          </Button>
+        </Box>
+        <Paper elevation={0} variant="outlined" sx={{ p: 3, mt: 3 }}>
           <Grid container spacing={2} alignItems="stretch">
             <Grid item xs={12} lg={4}>
               {authContext.authState.userInfo.role !== 'admin' ||
@@ -101,6 +114,13 @@ const Profile = () => {
           </Grid>
         </Paper>
       </Container>
+      <DialogContainer
+        title="Update User Profile"
+        open={open}
+        onClose={handleModalClose}
+      >
+        <RegisterForm user={authContext.authState.userInfo} />
+      </DialogContainer>
     </>
   );
 };

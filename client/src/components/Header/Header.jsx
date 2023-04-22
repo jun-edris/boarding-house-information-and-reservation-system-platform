@@ -3,6 +3,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Button,
   Container,
   Divider,
   Menu,
@@ -14,7 +15,7 @@ import {
 } from '@mui/material';
 import Logo from '../Logo/Logo';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useContext, useEffect, useState } from 'react';
@@ -22,9 +23,9 @@ import { AuthContext } from '../../context/AuthContext';
 import { FetchContext } from '../../context/FetchContext';
 
 const Header = () => {
-  // const openModalRef = useRef(null);
   const authContext = useContext(AuthContext);
   const fetchContext = useContext(FetchContext);
+  const location = useLocation();
   const [notifs, setNotifs] = useState([]);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElUNotif, setAnchorElNotif] = useState(null);
@@ -140,7 +141,15 @@ const Header = () => {
         <Container maxWidth={false}>
           <Toolbar>
             <Box sx={{ flexGrow: 1 }}>
-              <Logo />
+              <Link
+                to={
+                  authContext.authState.userInfo.noBH === false
+                    ? '/home/living'
+                    : '/home'
+                }
+              >
+                <Logo />
+              </Link>
             </Box>
 
             <Box
@@ -151,6 +160,18 @@ const Header = () => {
                 gap: 2,
               }}
             >
+              {!location.pathname.startsWith('/living') &&
+                authContext.authState.userInfo.noBH === false && (
+                  <Box>
+                    <Button
+                      variant="contained"
+                      onClick={() => history('/living')}
+                    >
+                      Go to My Room
+                    </Button>
+                  </Box>
+                )}
+
               <Tooltip title="Notification">
                 <Paper
                   variant="outlined"

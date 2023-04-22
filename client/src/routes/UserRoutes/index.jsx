@@ -97,6 +97,14 @@ const UserRoutes = {
           path: '/profile/living/:id',
           element: <Profile />,
         },
+        {
+          path: '/home/living',
+          element: <Home />,
+        },
+        {
+          path: '/living/boardinghouse/:id',
+          element: <BoardingHouseDetails />,
+        },
       ],
     },
   ],

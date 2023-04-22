@@ -37,7 +37,7 @@ const ButtonUploadWrapper = styled(Box)(
   `
 );
 
-const RegisterForm = () => {
+const RegisterForm = ({ user }) => {
   // const { register } = useAuth()
   const isMountedRef = useRefMounted();
   const [regionData, setRegion] = useState([]);
@@ -57,6 +57,64 @@ const RegisterForm = () => {
   const [preview, setPreview] = useState();
   const [image, setImage] = useState();
   const history = useNavigate();
+
+  const validations = user
+    ? Yup.object().shape({
+        email: Yup.string()
+          .email('The email provided should be a valid email address')
+          .max(255)
+          .required('The email field is required'),
+        firstName: Yup.string()
+          .max(255)
+          .required('The first name field is required'),
+        middleName: Yup.string()
+          .max(255)
+          .required('The middle name field is required'),
+        lastName: Yup.string()
+          .max(255)
+          .required('The last name field is required'),
+        contact: Yup.string()
+          .matches(/^(9)/, 'Must start with 9')
+          .max(10, 'Must be 10 digits')
+          .required('Contact number is required'),
+      })
+    : Yup.object().shape({
+        email: Yup.string()
+          .email('The email provided should be a valid email address')
+          .max(255)
+          .required('The email field is required'),
+        firstName: Yup.string()
+          .max(255)
+          .required('The first name field is required'),
+        middleName: Yup.string()
+          .max(255)
+          .required('The middle name field is required'),
+        lastName: Yup.string()
+          .max(255)
+          .required('The last name field is required'),
+        region: Yup.string().max(255).required('The region field is required'),
+        province: Yup.string()
+          .max(255)
+          .required('The region field is required'),
+        city: Yup.string().max(255).required('The region field is required'),
+        barangay: Yup.string()
+          .max(255)
+          .required('The region field is required'),
+        contact: Yup.string()
+          .matches(/^(9)/, 'Must start with 9')
+          .max(10, 'Must be 10 digits')
+          .required('Contact number is required'),
+        password: Yup.string()
+          .min(8, 'At least 8 characters!')
+          .max(255)
+          .required('The password field is required'),
+        confirmPass: Yup.string()
+          .oneOf([Yup.ref('password'), null], 'Passwords must match')
+          .required('Confirm your password'),
+        role: Yup.string()
+          .oneOf(['landlord', 'tenant'], 'Invalid user role')
+          .required('Please choose a role'),
+      });
 
   const region = () => {
     axios
@@ -197,11 +255,11 @@ const RegisterForm = () => {
     <>
       <Formik
         initialValues={{
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          email: '',
-          contact: '',
+          firstName: user ? user.firstName : '',
+          middleName: user ? user.middleName : '',
+          lastName: user ? user.lastName : '',
+          email: user ? user.email : '',
+          contact: user ? user.contact : '',
           region: '',
           province: '',
           city: '',
@@ -209,92 +267,59 @@ const RegisterForm = () => {
           password: '',
           confirmPass: '',
           role: '',
-          image: '',
+          image: user ? user.image : '',
         }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email('The email provided should be a valid email address')
-            .max(255)
-            .required('The email field is required'),
-          firstName: Yup.string()
-            .max(255)
-            .required('The first name field is required'),
-          middleName: Yup.string()
-            .max(255)
-            .required('The middle name field is required'),
-          lastName: Yup.string()
-            .max(255)
-            .required('The last name field is required'),
-          region: Yup.string()
-            .max(255)
-            .required('The region field is required'),
-          province: Yup.string()
-            .max(255)
-            .required('The region field is required'),
-          city: Yup.string().max(255).required('The region field is required'),
-          barangay: Yup.string()
-            .max(255)
-            .required('The region field is required'),
-          contact: Yup.string()
-            .matches(/^(9)/, 'Must start with 9')
-            .max(10, 'Must be 10 digits')
-            .required('Contact number is required'),
-          password: Yup.string()
-            .min(8, 'At least 8 characters!')
-            .max(255)
-            .required('The password field is required'),
-          confirmPass: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Passwords must match')
-            .required('Confirm your password'),
-          role: Yup.string()
-            .oneOf(['landlord', 'tenant'], 'Invalid user role')
-            .required('Please choose a role'),
-        })}
+        validationSchema={validations}
         onSubmit={async (
           values,
           { setErrors, setStatus, setSubmitting, resetForm }
         ) => {
           try {
             setSubmitting(true);
-            const {
-              firstName,
-              middleName,
-              lastName,
-              email,
-              contact,
-              password,
-              role,
-            } = values;
 
-            const toSendData = {
-              firstName,
-              middleName,
-              lastName,
-              email,
-              contact,
-              region: reg,
-              province: prov,
-              city: cit,
-              barangay: brgyN,
-              password,
-              role,
-              image,
-            };
+            if (user) {
+              console.log(values);
+            } else {
+              const {
+                firstName,
+                middleName,
+                lastName,
+                email,
+                contact,
+                password,
+                role,
+              } = values;
 
-            const { data } = await publicFetch.post(
-              `/auth/register`,
-              toSendData
-            );
-            if (isMountedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
+              const toSendData = {
+                firstName,
+                middleName,
+                lastName,
+                email,
+                contact,
+                region: reg,
+                province: prov,
+                city: cit,
+                barangay: brgyN,
+                password,
+                role,
+                image,
+              };
+
+              const { data } = await publicFetch.post(
+                `/auth/register`,
+                toSendData
+              );
+              if (isMountedRef.current) {
+                setStatus({ success: true });
+                setSubmitting(false);
+              }
+              setPreview(null);
+              resetForm(true);
+              toast.success(data.msg);
+              setTimeout(() => {
+                history('/');
+              }, 900);
             }
-            setPreview(null);
-            resetForm(true);
-            toast.success(data.msg);
-            setTimeout(() => {
-              history('/');
-            }, 900);
           } catch (error) {
             toast.error(error.msg);
             if (isMountedRef.current) {
@@ -324,23 +349,27 @@ const RegisterForm = () => {
               <Grid item xs={12} lg={8}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <FormControl fullWidth variant="filled">
-                      <InputLabel id="role">Role</InputLabel>
-                      <Select
-                        error={Boolean(touched.role && errors.role)}
-                        labelId="role"
-                        id="role"
-                        value={values.role}
-                        label="Role"
-                        onChange={handleChange}
-                        name="role"
-                      >
-                        <MenuItem value="landlord">Landlord</MenuItem>
-                        <MenuItem value="tenant">Tenant</MenuItem>
-                      </Select>
-                    </FormControl>
-                    {Boolean(touched.role && errors.role) && (
-                      <FormHelperText error>{errors.role}</FormHelperText>
+                    {!user && (
+                      <>
+                        <FormControl fullWidth variant="filled">
+                          <InputLabel id="role">Role</InputLabel>
+                          <Select
+                            error={Boolean(touched.role && errors.role)}
+                            labelId="role"
+                            id="role"
+                            value={values.role}
+                            label="Role"
+                            onChange={handleChange}
+                            name="role"
+                          >
+                            <MenuItem value="landlord">Landlord</MenuItem>
+                            <MenuItem value="tenant">Tenant</MenuItem>
+                          </Select>
+                        </FormControl>
+                        {Boolean(touched.role && errors.role) && (
+                          <FormHelperText error>{errors.role}</FormHelperText>
+                        )}
+                      </>
                     )}
                   </Grid>
                   <Grid item xs={12}>
@@ -462,17 +491,29 @@ const RegisterForm = () => {
                       variant="rounded"
                       sx={{ width: 150, height: 150, borderRadius: 5 }}
                     >
-                      {preview ? (
-                        <img
-                          src={preview}
-                          alt="To upload"
-                          width="150"
-                          height="150"
-                          aspectRatio={1 / 1}
-                        />
-                      ) : (
-                        <AccountBoxIcon sx={{ width: 125, height: 125 }} />
-                      )}
+                      <>
+                        {/* {user && (
+                          <img
+                            src={user.image}
+                            alt="To upload"
+                            width="150"
+                            height="150"
+                            aspectRatio={1 / 1}
+                          />
+                        )} */}
+
+                        {preview !== undefined ? (
+                          <img
+                            src={preview}
+                            alt="To upload"
+                            width="150"
+                            height="150"
+                            aspectRatio={1 / 1}
+                          />
+                        ) : (
+                          <AccountBoxIcon sx={{ width: 125, height: 125 }} />
+                        )}
+                      </>
                     </Avatar>
                     <ButtonUploadWrapper>
                       <input
@@ -614,78 +655,77 @@ const RegisterForm = () => {
                 )}
               </Grid>
             </Grid>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm>
-                <TextField
-                  error={Boolean(touched.password && errors.password)}
-                  fullWidth
-                  margin="dense"
-                  helperText={touched.password && errors.password}
-                  label={'Password'}
-                  name="password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.password}
-                  variant="filled"
-                  type={showPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={() => setShowPassword(!showPassword)}
-                          onMouseDown={() => setShowPassword(!showPassword)}
-                          edge="end"
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
+            {!user && (
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm>
+                  <TextField
+                    error={Boolean(touched.password && errors.password)}
+                    fullWidth
+                    margin="dense"
+                    helperText={touched.password && errors.password}
+                    label={'Password'}
+                    name="password"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.password}
+                    variant="filled"
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => setShowPassword(!showPassword)}
+                            onMouseDown={() => setShowPassword(!showPassword)}
+                            edge="end"
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm>
+                  <TextField
+                    error={Boolean(touched.confirmPass && errors.confirmPass)}
+                    fullWidth
+                    margin="dense"
+                    helperText={touched.confirmPass && errors.confirmPass}
+                    label={'Confirm Password'}
+                    name="confirmPass"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.confirmPass}
+                    variant="filled"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle confirm password visibility"
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                            onMouseDown={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                            edge="end"
+                          >
+                            {showConfirmPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm>
-                <TextField
-                  error={Boolean(touched.confirmPass && errors.confirmPass)}
-                  fullWidth
-                  margin="dense"
-                  helperText={touched.confirmPass && errors.confirmPass}
-                  label={'Confirm Password'}
-                  name="confirmPass"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.confirmPass}
-                  variant="filled"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle confirm password visibility"
-                          onClick={() =>
-                            setShowConfirmPassword(!showConfirmPassword)
-                          }
-                          onMouseDown={() =>
-                            setShowConfirmPassword(!showConfirmPassword)
-                          }
-                          edge="end"
-                        >
-                          {showConfirmPassword ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-            </Grid>
+            )}
 
-            {/* {Boolean(touched.terms && errors.terms) && (
-						<FormHelperText error>{errors.terms}</FormHelperText>
-					)} */}
             <Button
               sx={{
                 mt: 3,
@@ -698,7 +738,7 @@ const RegisterForm = () => {
               size="large"
               variant="contained"
             >
-              {'Create your account'}
+              {user ? 'Update' : 'Create your account'}
             </Button>
           </form>
         )}

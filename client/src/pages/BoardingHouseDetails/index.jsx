@@ -124,7 +124,10 @@ const BoardingHouseDetails = () => {
                 <IconButton
                   aria-label="Go to home"
                   onClick={() => {
-                    history('/home');
+                    if (authContext.authState.userInfo.noBH === true)
+                      return history('/home');
+                    if (authContext.authState.userInfo.noBH === false)
+                      return history(`/home/living`);
                   }}
                 >
                   <ArrowBackIcon />

@@ -8,6 +8,8 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -15,20 +17,24 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 16,
     overflow: 'hidden',
     boxSizing: 'border-box',
-    margin: theme.spacing(2),
     boxShadow: '0px 14px 80px rgba(34, 35, 58, 0.2)',
     transition: 'transform 0.3s',
     '&:hover': {
       transform: 'translateY(-4px)',
     },
     width: '100%',
+    height: '100%',
   },
   content: {
     paddingLeft: 20,
     paddingRight: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   media: {
-    width: 160,
+    width: 270,
   },
   title: {
     fontSize: 18,
@@ -51,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BHCards = ({ name, address, description, id, img }) => {
+  const authContext = useContext(AuthContext);
   const classes = useStyles();
   const history = useNavigate();
 
@@ -71,29 +78,39 @@ const BHCards = ({ name, address, description, id, img }) => {
         )}
 
         <CardContent className={classes.content}>
-          <Typography className={classes.title} variant="h5" component="h2">
-            {name}
-          </Typography>
-          <Typography className={classes.address} variant="body2" component="p">
-            {address}
-          </Typography>
-          <Typography
-            className={classes.description}
-            variant="body1"
-            sx={{
-              boxSizing: 'border-box',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            {description}
-          </Typography>
+          <Box>
+            <Typography className={classes.title} variant="h5" component="h2">
+              {name}
+            </Typography>
+            <Typography
+              className={classes.address}
+              variant="body2"
+              component="p"
+            >
+              {address}
+            </Typography>
+            <Typography
+              className={classes.description}
+              variant="body1"
+              sx={{
+                boxSizing: 'border-box',
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {description}
+            </Typography>
+          </Box>
+
           <Button
             type="button"
             className={classes.button}
             color="primary"
             variant="contained"
             onClick={() => {
-              history(`/boardinghouse/${id}`);
+              if (authContext.authState.userInfo.noBH === true)
+                return history(`/boardinghouse/${id}`);
+              if (authContext.authState.userInfo.noBH === false)
+                return history(`/living/boardinghouse/${id}`);
             }}
           >
             View Boarding House

@@ -29,7 +29,7 @@ const Register = () => {
       <MainContent>
         <TopWrapper>
           <Container maxWidth="xl">
-            <Logo />
+            <Logo wid={150} />
             <Card
               sx={{
                 mt: 3,
