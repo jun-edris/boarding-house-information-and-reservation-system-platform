@@ -211,7 +211,7 @@ const Sidebar = ({ index }) => {
               : '/home'
           }
         >
-          <Logo />
+          <Logo wid={open ? 150 : 40} />
         </Link>
       </Box>
       <Divider />
@@ -255,6 +255,7 @@ const Sidebar = ({ index }) => {
                 display: 'flex',
                 alignItems: 'center',
                 p: 0.5,
+                pr: 0,
                 cursor: 'pointer',
                 mt: open ? 0 : 1,
               }}
@@ -360,39 +361,7 @@ const Sidebar = ({ index }) => {
             </List>
           )}
         </Popover>
-        {/* <Menu
-					// sx={{ mt: '55px' }}
-					id='menu-appbar'
-					anchorEl={anchorElUNotif}
-					anchorOrigin={{
-						vertical: 'top',
-						horizontal: 'left',
-					}}
-					keepMounted
-					transformOrigin={{
-						vertical: 'top',
-						horizontal: 'left',
-					}}
-					open={Boolean(anchorElUNotif)}
-					onClose={handleCloseUserMenu}
-				>
-					{notifs?.length > 0 ? (
-						notifs?.map((notif, index) => (
-							<MenuItem
-								key={notif?._id}
-								onClick={() => {
-									history(`/${notif?.urlLink}`);
-								}}
-							>
-								<Typography textAlign='center'>{notif?.description}</Typography>
-							</MenuItem>
-						))
-					) : (
-						<MenuItem>
-							<Typography textAlign='center'>No Notification to display!</Typography>
-						</MenuItem>
-					)}
-				</Menu> */}
+
         {open && (
           <Box sx={{ mt: 1.5 }}>
             <Typography

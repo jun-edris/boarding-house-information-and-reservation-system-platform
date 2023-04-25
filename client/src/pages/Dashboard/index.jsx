@@ -269,16 +269,18 @@ const Dashboard = () => {
                   <Grid container spacing={2} sx={{ mt: 0.5 }}>
                     <Grid item xs={12} xl>
                       <DisplayCount
+                        colorBG="secondary.main"
                         title="Landlord Registered"
                         count={landlordCount}
-                        icon={<SupervisorAccountIcon fontSize="large" />}
+                        icon={<SupervisorAccountIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
                     <Grid item xs={12} xl>
                       <DisplayCount
+                        colorBG="primary.main"
                         title="Tenant Registered"
                         count={tenantCount}
-                        icon={<PeopleIcon fontSize="large" />}
+                        icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
                   </Grid>
@@ -288,16 +290,18 @@ const Dashboard = () => {
                   <Grid container spacing={2} sx={{ mt: 0.5 }}>
                     <Grid item xs={12} xl>
                       <DisplayCount
+                        colorBG="secondary.main"
                         title="Pending Boarding House"
                         count={pendingBHCount}
-                        icon={<SupervisorAccountIcon fontSize="large" />}
+                        icon={<SupervisorAccountIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
                     <Grid item xs={12} xl>
                       <DisplayCount
+                        colorBG="primary.main"
                         title="Approved Boarding House"
                         count={approvedBHCount}
-                        icon={<PeopleIcon fontSize="large" />}
+                        icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
                   </Grid>
@@ -325,23 +329,26 @@ const Dashboard = () => {
                   <Grid container spacing={2} sx={{ mt: 0.5 }}>
                     <Grid item xs={12} xl>
                       <DisplayCount
+                        colorBG="primary.main"
                         title="Living"
                         count={roomTenants.length}
-                        icon={<PeopleIcon fontSize="large" />}
+                        icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
                     <Grid item xs={12} xl>
                       <DisplayCount
+                        colorBG="secondary.main"
                         title="Requested To Live"
                         count={roomTenantsToLive.length}
-                        icon={<PeopleIcon fontSize="large" />}
+                        icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
                     <Grid item xs={12} xl>
                       <DisplayCount
+                        colorBG="primary.dark"
                         title="Requested To Leave"
                         count={roomTenantsToLeave.length}
-                        icon={<PeopleIcon fontSize="large" />}
+                        icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
                   </Grid>

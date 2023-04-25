@@ -10,7 +10,6 @@ import {
   Box,
   Button,
   Card,
-  CardContent,
   CardMedia,
   Chip,
   Container,

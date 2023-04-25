@@ -313,173 +313,166 @@ const BoardingHouse = () => {
       >
         <UserAgreement>
           <Box>
-            <Typography variant="h4" align="center">
-              CONDITIONS
+            <Typography variant="h5" align="center">
+              Conditions and terms
             </Typography>
-            <Typography variant="h4" align="center">
-              (TENANT & BOARDING HOUSE OWNER)
+            <Typography variant="h5" align="center">
+              (Admin and Boarding House Owner)
             </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">1. Scope</Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              The legal relationship between the tenant and the boarding house
-              owner is governed by these terms and conditions. You accept legal
-              responsibility and acknowledge the content of these terms by
-              confirming your reservation.
+            <Typography variant="h4" align="center" sx={{ mt: 2 }}>
+              BOARDING HOUSE INFORMATION AND RESERVATION SYSTEM PLATFORM
+              AGREEMENT
             </Typography>
           </Box>
           <Box my={3}>
-            <Typography variant="h5">
-              2. Request for Reservation or Contract
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              2.1 By submitting your request, you agree to a legally binding
-              contract. You can make your reservation in writing, orally, or
-              over the phone. Your request is not yet acceptable, but it
-              entitles you to enter into a contract with the boarding house
-              owner.
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              2.2 The contract between you and the landlord is only formed when
-              the Boarding House System Information and Reservation Platform
-              Admin confirms your booking request in writing or by e-mail and
-              you accept the terms and conditions
+            <ol>
+              <li>This is a legally binding contract.</li>
+              <li>This agreement is for use by a boarding house owner only.</li>
+            </ol>
+            <p style={{ textIndent: '60px', fontWeight: 'bold' }}>
+              A boarding house landlady or landlord must:
+            </p>
+            <ul>
+              <li>
+                contain one or more boarding rooms, where tenants have exclusive
+                rights to occupy particular sleep quarters.
+              </li>
+              <li>have communal facilities for shared use by the tenants</li>
+              <li>
+                be occupied or intended by the landlord to be occupied by at
+                least six tenants.
+              </li>
+              <li>
+                be intended to, or in fact does, last for 28 days or more.
+              </li>
+            </ul>
+            <ol start={3}>
+              <li>
+                This agreement must be completed in full and signed by the
+                tenant and landlord. The parties must record their full names
+                correctly.
+              </li>
+              <li>
+                The landlady or landlord must include a signed statement with
+                any boarding house landlady or landlord agreement that covers
+                what insulation a property has in the ceilings, floors, and
+                walls, including where it is, what type it is, and what
+                condition it is in.
+              </li>
+              <li>
+                The landlady or landlord must also provide a statement to
+                confirm they will comply, or already comply, with the healthy
+                home standards. This statement can be combined with the Healthy
+                Homes Standards Compliance Statement with one signature.
+              </li>
+              <li>
+                The landlady or landlord must sign a statement about whether the
+                property is insured and, if so, what the excess is. The landlady
+                or landlord must also include a statement informing tenants that
+                the insurance policy for the property is available on request.
+              </li>
+              <li>
+                The landlady or landlord must <strong>comply</strong> with all
+                the{' '}
+                <strong>
+                  BOARDING HOUSE INFORMATION AND RESERVATION SYSTEM PLATFORM
+                </strong>{' '}
+                agreements, such as{' '}
+                <strong>
+                  NBI Clearance, License Accreditation from BIR, Business
+                  Permit, Fire Safety Inspection Certificate, Mayor’s Permit,
+                  Certificate of Registration, and Sanitary Permit.
+                </strong>
+              </li>
+              <li>
+                All Boarding House properties must meet the requirements in the
+                regulations regarding insulation and smoke alarms.
+              </li>
+              <li>
+                Before signing this agreement, all parties should carefully read
+                it and seek information from Tenancy Services if they are
+                unclear about what they are agreeing to.
+              </li>
+              <li>
+                If a bond is paid, the landlady or landlord must immediately
+                provide a receipt to the tenant.
+              </li>
+              <li>Letting fees can’t be charged to tenants.</li>
+            </ol>
+          </Box>
+          <Box>
+            <Typography variant="h5" align="center">
+              OUTLINE OF THE BOARDING HOUSE INFORMATION AND RESERVATION SYSTEM
+              PLATFORM AGREEMENT
             </Typography>
           </Box>
           <Box my={3}>
-            <Typography variant="h5">3. Prices and Services</Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              3.1 The scope of the contractual services and the resulting prices
-              are derived from the offer's terms of reference and the
-              information in the reservation confirmation. The rate includes the
-              costs of electricity, water, heating, and cleaning.
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              3.2 The agreed-upon prices include any applicable VAT.
-              Specifications will be made in the confirmation of the reservation
-              if there are discrepancies between the information in the offer
-              and the information in the booking confirmation.
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              3.3 The contract is final and will not be modified as a
-              consequence of late arrival and/or early departure due to illness
-              or other reasons; the responsibility will not be assumed by the
-              landlord or Boarding House System Information and Reservation
-              Platform Admin for the reasons stated previously, and you will not
-              be entitled to a proportional refund.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">4. Payment</Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              4.1 The total amount of your stay must be paid in full or by
-              credit card at the time of check-in.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">
-              5. Cancellation by the tenant and the cost of cancellation
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              5.1 You have the right to cancel your reservation at any time. We
-              recommend that the decision to withdraw be made in writing for
-              reasons of proof. In the event of withdrawal, we have the right to
-              seek reimbursement from you for our expenses.
-            </Typography>
-            <Box sx={{ marginTop: 2 }}>
-              <Typography>
-                5.2 If the reservation is canceled, the following cancellation
-                fees will be assessed:
-              </Typography>
-              <Typography sx={{ pl: 5, marginTop: 2 }}>
-                a. According to the concluded contract, free cancellation of the
-                reservation before the start of the schedule period (planned
-                arrival) is possible for reservations up to 1 week per room.
-              </Typography>
-            </Box>
-            <Typography sx={{ marginTop: 2 }}>
-              5.3 The calculation is based on the agreed-upon total price. The
-              receipt of your resignation from us is decisive for the
-              staggering. The proof of a lesser failure is still with you.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">
-              6. Subletting/tenant replacement
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              6.1 It is prohibited to sublet or re-let the rented object, as
-              well as to use it for purposes other than accommodations.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">
-              6. Withdrawal from the landlord
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              7.1 If an advance payment has been agreed upon;
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              A. If the required payment following a lapse is not made within
-              the grace period allowed by the Boarding House System Information
-              and Reservation Platform Admin, the lessor has the right to
-              withdraw from the entitled contract.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">
-              8. Accommodation/Taking Over/Return
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              8.1 Keys are distributed upon arrival, either personally or
-              through an automated key dispenser system. More information is
-              available directly from the Boarding House System Information and
-              Reservation Platform Admin.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">
-              9. Asset/Obligation to Cooperate/Warranty/Claim Exclusion
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              9.1 As a tenant of the property, you and any co-users agree to
-              take care of the property and its associated inventory. You are
-              responsible for any missing or damaged items as well as inventory.
-              Boarding House System Information and Reservation Platform Admin
-              reserves all rights.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">10. Miscellaneous</Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              10.1 Noise Pollution: Avoid disturbing your neighbors. Please
-              allow for normal and appropriate background noise, such as that
-              produced by construction workers. We are not liable for any extra
-              noise caused by road works or other activities outside the
-              building's boundaries. There is no such thing as a right to
-              compensation.
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              10.2 Pets are not permitted.
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              10.3 Valuables: There is no liability for valuables that are lost
-              or stolen. As a precaution, make sure you have liability insurance
-              and personal liability insurance in case of damage.
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              10.4 Smoking is prohibited throughout the property.
-            </Typography>
-          </Box>
-          <Box my={3}>
-            <Typography variant="h5">
-              11. Individual clauses are invalid.
-            </Typography>
-            <Typography sx={{ marginTop: 2 }}>
-              Individual provisions that are invalid do not invalidate the
-              overall business result conditions.
-            </Typography>
+            <ol>
+              <li>Agreement</li>
+            </ol>
+            <ul>
+              <li>Each party should keep a copy of this agreement.</li>
+              <li>
+                Changes in the particulars of either party must be notified to
+                the other party within 10 working days.
+              </li>
+            </ul>
+            <ol start={2}>
+              <li>Rent</li>
+            </ol>
+            <ul>
+              <li>
+                The landlady or landlord shall not require rent to be paid more
+                than 2 weeks in advance or until rent already paid has been used
+                up.
+              </li>
+              <li>
+                Receipts must be given immediately if rent is paid in cash.
+              </li>
+            </ul>
+            <ol start={3}>
+              <li>Boarding house owner responsibilities</li>
+            </ol>
+            <ul>
+              <li>Provide the room in a reasonable state of cleanliness.</li>
+              <li>
+                Provide and maintain the room and boarding house to a reasonable
+                state of repair and comply with all building, health, and safety
+                requirements that apply to the premises.
+              </li>
+              <li>Allow the tenant quiet enjoyment of the room.</li>
+              <li>
+                Ensure the tenant has access to the room and toilet and bathroom
+                facilities at all times and to other facilities at all
+                reasonable hours.
+              </li>
+              <li>
+                Ensure the house rules and fire evacuation procedures are on
+                display in the boarding house at all times.
+              </li>
+              <li>
+                Enforce the house rules in a fair and consistent manner and give
+                7 days written notice of any new house rules.
+              </li>
+              <li>
+                Pay rates and any insurance taken out by the landlady or
+                landlord.
+              </li>
+              <li>
+                Not interfere with the supply of any services to the premises.
+              </li>
+            </ul>
+            <ol start={4}>
+              <li>Tenant’s responsibilities</li>
+            </ol>
+            <ul>
+              <li>Pay the rent on time.</li>
+              <li>
+                Keep the boarding room reasonably clean and tidy, and notify the
+                landlady or landlord as soon as any repairs are needed. You may
+                not withhold rent if you cannot get repairs done.
+              </li>
+            </ul>
           </Box>
         </UserAgreement>
       </DialogContainer>

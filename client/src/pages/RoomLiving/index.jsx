@@ -8,6 +8,7 @@ import {
   Container,
   Divider,
   Grid,
+  IconButton,
   Paper,
   Typography,
 } from '@mui/material';
@@ -17,6 +18,8 @@ import { FetchContext } from '../../context/FetchContext';
 import { ToastContainer, toast } from 'react-toastify';
 import ReviewModal from '../../components/Review/ReviewModal';
 import ReactStars from 'react-stars';
+import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const RoomLiving = () => {
   const authContext = useContext(AuthContext);
@@ -26,6 +29,7 @@ const RoomLiving = () => {
   const [owner, setOwner] = useState({});
   const [reservation, setReservation] = useState({});
   const [dateToLeave, setDateToLeave] = useState(new Date());
+  const history = useNavigate();
 
   const getTenantRoom = async () => {
     fetchContext.authAxios
@@ -122,9 +126,20 @@ const RoomLiving = () => {
               mr="auto"
               sx={{
                 display: 'flex',
-                justifyContent: 'flex-end',
+                justifyContent: 'space-between',
               }}
             >
+              <IconButton
+                aria-label="Go to home"
+                onClick={() => {
+                  if (authContext.authState.userInfo.noBH === true)
+                    return history('/home');
+                  if (authContext.authState.userInfo.noBH === false)
+                    return history(`/home/living`);
+                }}
+              >
+                <ArrowBackIcon />
+              </IconButton>
               <Button
                 variant="contained"
                 color="secondary"

@@ -160,7 +160,7 @@ const Header = () => {
                 gap: 2,
               }}
             >
-              {!location.pathname.startsWith('/living') &&
+              {location.pathname !== '/living' &&
                 authContext.authState.userInfo.noBH === false && (
                   <Box>
                     <Button
@@ -171,7 +171,6 @@ const Header = () => {
                     </Button>
                   </Box>
                 )}
-
               <Tooltip title="Notification">
                 <Paper
                   variant="outlined"
