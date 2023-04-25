@@ -135,7 +135,7 @@ const BoardingHouseDetails = () => {
                       return history(`/home/living`);
                   }}
                 >
-                  <ArrowBackIcon />
+                  <ArrowBackIcon sx={{ color: 'white' }} />
                 </IconButton>
                 <Box
                   sx={{
@@ -206,35 +206,37 @@ const BoardingHouseDetails = () => {
                     style={{ borderRadius: 20 }}
                   />
                   <Box mt={1}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} alignItems="stretch">
                       <Grid item xs={12} lg={9}>
-                        <Typography variant="h5" component="h6">
-                          {bHouse?.houseName}
-                        </Typography>
-                        <Box
-                          mt={1}
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                          }}
-                        >
-                          <LocationOnIcon color="disabled" />
-                          <Typography variant="body2">
-                            {bHouse?.owner?.barangay} {bHouse?.owner?.city}{' '}
-                            {bHouse?.owner?.province} {bHouse?.owner?.region}
+                        <Paper variant="outlined" sx={{ p: 2 }}>
+                          <Typography variant="h5" component="h6">
+                            {bHouse?.houseName}
                           </Typography>
-                        </Box>
-                        <Box mt={2}>
-                          <Typography
+                          <Box
+                            mt={1}
                             sx={{
-                              boxSizing: 'border-box',
-                              whiteSpace: 'pre-wrap',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1,
                             }}
                           >
-                            {bHouse?.description}
-                          </Typography>
-                        </Box>
+                            <LocationOnIcon color="disabled" />
+                            <Typography variant="body2">
+                              {bHouse?.owner?.barangay} {bHouse?.owner?.city}{' '}
+                              {bHouse?.owner?.province} {bHouse?.owner?.region}
+                            </Typography>
+                          </Box>
+                          <Box mt={2}>
+                            <Typography
+                              sx={{
+                                boxSizing: 'border-box',
+                                whiteSpace: 'pre-wrap',
+                              }}
+                            >
+                              {bHouse?.description}
+                            </Typography>
+                          </Box>
+                        </Paper>
                       </Grid>
                       <Grid item xs={12} lg={3}>
                         <Paper
@@ -245,6 +247,7 @@ const BoardingHouseDetails = () => {
                             px: 2,
                             flexDirection: 'column',
                             alignItems: 'center',
+                            height: '100%',
                           }}
                         >
                           <Avatar
@@ -282,102 +285,106 @@ const BoardingHouseDetails = () => {
               </Grid>
 
               <Divider />
-              <Typography sx={{ marginTop: 4, marginBottom: 3 }} variant="h6">
-                Rooms Available
-              </Typography>
-              <Grid container spacing={2}>
-                {bHouse?.rooms?.map((room, index) => {
-                  return (
-                    <Grid item key={index} xs={12} md={3} lg={3}>
-                      <Card
-                        sx={{
-                          boxShadow: 'none',
-                          '&:hover': {
-                            cursor: 'pointer',
-                          },
-                        }}
-                        onClick={() => {
-                          setRoom(room);
-                          setSelectedMenu('Room Details');
-                          setShowRoomDetails(true);
-                        }}
-                      >
-                        {room?.image ? (
-                          <CardMedia
-                            component="img"
-                            height="270"
-                            width="350"
-                            image={room?.image}
-                            alt={bHouse?.houseName}
-                            sx={{
-                              borderRadius: '7%',
-                            }}
-                          />
-                        ) : (
-                          <Box height={270} width={350}>
-                            <Typography variant="body2">No image</Typography>
-                          </Box>
-                        )}
-                      </Card>
-                    </Grid>
-                  );
-                })}
-              </Grid>
+              <Paper variant="outlined" sx={{ p: 3, marginTop: 4 }}>
+                <Typography variant="h4" sx={{ marginBottom: 3 }}>
+                  Rooms Available
+                </Typography>
+                <Grid container spacing={2}>
+                  {bHouse?.rooms?.map((room, index) => {
+                    return (
+                      <Grid item key={index} xs={12} md={3} lg={3}>
+                        <Card
+                          sx={{
+                            boxShadow: 'none',
+                            '&:hover': {
+                              cursor: 'pointer',
+                            },
+                          }}
+                          onClick={() => {
+                            setRoom(room);
+                            setSelectedMenu('Room Details');
+                            setShowRoomDetails(true);
+                          }}
+                        >
+                          {room?.image ? (
+                            <CardMedia
+                              component="img"
+                              height="270"
+                              width="350"
+                              image={room?.image}
+                              alt={bHouse?.houseName}
+                              sx={{
+                                borderRadius: '7%',
+                              }}
+                            />
+                          ) : (
+                            <Box height={270} width={350}>
+                              <Typography variant="body2">No image</Typography>
+                            </Box>
+                          )}
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Paper>
             </Box>
             <Divider />
             <Box mt={4} mb={4}>
-              <Typography variant="h5" component="h6">
-                Boarding house feedback from the tenants
-              </Typography>
-              <Box>
-                {reviews?.map((review) => (
-                  <Box key={review?._id}>
-                    <Box
-                      mt={4}
-                      pb={2}
-                      sx={{
-                        display: 'flex',
-                        gap: 2,
-                      }}
-                    >
-                      <Box>
-                        <Avatar src={review?.tenant?.image} />
-                      </Box>
-                      <Box>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                          <Typography
-                            variant="body1"
-                            sx={{ textTransform: 'capitalize' }}
-                          >
-                            {review?.tenant?.firstName}{' '}
-                            {review?.tenant?.lastName.substr(0, 1)}.
-                          </Typography>
-                          <ReactStars
-                            count={5}
-                            value={review?.rating}
-                            edit={false}
-                            size={16}
-                            color2="#ffd700"
-                          />
+              <Paper variant="outlined" sx={{ p: 3 }}>
+                <Typography variant="h5" component="h6">
+                  Boarding house feedback from the tenants
+                </Typography>
+                <Box>
+                  {reviews?.map((review) => (
+                    <Box key={review?._id}>
+                      <Box
+                        mt={4}
+                        pb={2}
+                        sx={{
+                          display: 'flex',
+                          gap: 2,
+                        }}
+                      >
+                        <Box>
+                          <Avatar src={review?.tenant?.image} />
                         </Box>
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: 'grey.500',
-                            textTransform: 'uppercase',
-                          }}
-                        >
-                          {review?.room?.roomName}
-                        </Typography>
-                        <Typography variant="body2" sx={{ marginTop: 2 }}>
-                          {review?.description}
-                        </Typography>
+                        <Box>
+                          <Box sx={{ display: 'flex', gap: 2 }}>
+                            <Typography
+                              variant="body1"
+                              sx={{ textTransform: 'capitalize' }}
+                            >
+                              {review?.tenant?.firstName}{' '}
+                              {review?.tenant?.lastName.substr(0, 1)}.
+                            </Typography>
+                            <ReactStars
+                              count={5}
+                              value={review?.rating}
+                              edit={false}
+                              size={16}
+                              color2="#ffd700"
+                            />
+                          </Box>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: 'grey.500',
+                              textTransform: 'uppercase',
+                            }}
+                          >
+                            {review?.room?.roomName}
+                          </Typography>
+                          <Typography variant="body2" sx={{ marginTop: 2 }}>
+                            {review?.description}
+                          </Typography>
+                        </Box>
                       </Box>
+                      <Divider />
                     </Box>
-                    <Divider />
-                  </Box>
-                ))}
-              </Box>
+                  ))}
+                </Box>
+              </Paper>
             </Box>
           </Container>
         </Box>

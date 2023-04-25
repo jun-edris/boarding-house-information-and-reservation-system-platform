@@ -41,7 +41,7 @@ const Home = () => {
 
   return (
     <>
-      <Container maxWidth={false}>
+      <Container maxWidth={false} sx={{ height: '100%', minHeight: '100vh' }}>
         {bHouses.length !== 0 ? (
           <Grid container direction="row" spacing={2} sx={{ mt: 1 }}>
             {bHouses?.map((house, index) => {

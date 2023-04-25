@@ -265,7 +265,9 @@ const Dashboard = () => {
             <Box sx={{ mt: 5 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} lg={6}>
-                  <Typography variant="h5">Users</Typography>
+                  <Typography variant="h5" color="white">
+                    Users
+                  </Typography>
                   <Grid container spacing={2} sx={{ mt: 0.5 }}>
                     <Grid item xs={12} xl>
                       <DisplayCount
@@ -323,7 +325,9 @@ const Dashboard = () => {
         {authContext.authState.userInfo.role === 'landlord' && (
           <>
             <Box sx={{ mt: 5 }}>
-              <Typography variant="h5">Tenants</Typography>
+              <Typography variant="h5" color="white">
+                Tenants
+              </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} lg={12}>
                   <Grid container spacing={2} sx={{ mt: 0.5 }}>

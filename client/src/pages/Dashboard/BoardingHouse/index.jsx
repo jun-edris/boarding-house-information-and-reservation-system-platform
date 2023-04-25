@@ -154,7 +154,7 @@ const BoardingHouse = () => {
       {boardingHouse ? (
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12} lg={3}>
-            <Paper variant="outlined" sx={{ py: 4, px: 2 }}>
+            <Paper variant="outlined" sx={{ py: 4, px: 2, height: '100%' }}>
               <img
                 src={boardingHouse?.image}
                 alt={boardingHouse?.houseName}
@@ -163,135 +163,143 @@ const BoardingHouse = () => {
             </Paper>
           </Grid>
           <Grid item xs={12} lg={9}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography
-                variant="h3"
-                component="p"
-                sx={{ fontWeight: 'bold' }}
+            <Paper variant="outlined" sx={{ p: 3 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
               >
-                {boardingHouse?.houseName}
-              </Typography>
-              <Chip
-                label={
-                  boardingHouse?.approved ? 'Approved' : 'Waiting for Approval'
-                }
-                color={boardingHouse?.approved ? 'success' : 'warning'}
-              />
-            </Box>
+                <Typography
+                  variant="h3"
+                  component="p"
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  {boardingHouse?.houseName}
+                </Typography>
+                <Chip
+                  label={
+                    boardingHouse?.approved
+                      ? 'Approved'
+                      : 'Waiting for Approval'
+                  }
+                  color={boardingHouse?.approved ? 'success' : 'warning'}
+                />
+              </Box>
 
-            <Typography component="pre" sx={{ mt: 3 }}>
-              {boardingHouse?.description}
-            </Typography>
+              <Typography component="pre" sx={{ mt: 3 }}>
+                {boardingHouse?.description}
+              </Typography>
+            </Paper>
           </Grid>
 
           {boardingHouse?.rooms?.length === 0 ? (
             <Grid item xs={12} mt={3}>
-              <Typography>No rooms added yet.</Typography>
+              <Paper variant="outlined" sx={{ p: 3 }}>
+                <Typography>No rooms added yet.</Typography>
+              </Paper>
             </Grid>
           ) : (
             <Grid item xs={12} mt={3}>
-              <Typography variant="h5" component="p">
-                Rooms
-              </Typography>
-              <Grid container spacing={2} mt={1} alignItems="stretch">
-                {boardingHouse?.rooms?.map((room, index) => {
-                  return (
-                    <Grid item xs={12} md={3} lg={3} key={index}>
-                      <Card
-                        sx={{
-                          height: '100%',
-                        }}
-                      >
-                        <CardMedia
-                          sx={{ height: 200 }}
-                          image={room.image}
-                          title={room.type}
-                        />
-                        <CardContent>
-                          <Box mb={2}>
-                            <Typography
-                              gutterBottom
-                              variant="h6"
-                              component="h6"
-                              sx={{ textTransform: 'capitalize' }}
-                            >
-                              {room.roomName}
-                            </Typography>
-                            <Typography
-                              gutterBottom
-                              variant="body2"
-                              component="span"
-                              sx={{ textTransform: 'capitalize' }}
-                            >
-                              {room.roomType}
-                            </Typography>
-                          </Box>
+              <Paper variant="outlined" sx={{ p: 3 }}>
+                <Typography variant="h5" component="p">
+                  Rooms
+                </Typography>
+                <Grid container spacing={2} mt={1} alignItems="stretch">
+                  {boardingHouse?.rooms?.map((room, index) => {
+                    return (
+                      <Grid item xs={12} md={3} lg={3} key={index}>
+                        <Card
+                          sx={{
+                            height: '100%',
+                          }}
+                        >
+                          <CardMedia
+                            sx={{ height: 200 }}
+                            image={room.image}
+                            title={room.type}
+                          />
+                          <CardContent>
+                            <Box mb={2}>
+                              <Typography
+                                gutterBottom
+                                variant="h6"
+                                component="h6"
+                                sx={{ textTransform: 'capitalize' }}
+                              >
+                                {room.roomName}
+                              </Typography>
+                              <Typography
+                                gutterBottom
+                                variant="body2"
+                                component="span"
+                                sx={{ textTransform: 'capitalize' }}
+                              >
+                                {room.roomType}
+                              </Typography>
+                            </Box>
 
-                          <Typography
-                            variant="body1"
-                            component="pre"
-                            sx={{
-                              whiteSpace: 'pre-wrap',
-                              textOverflow: 'ellipsis',
-                            }}
-                          >
-                            {room.description}
-                          </Typography>
-                          <Box mt={2}>
                             <Typography
-                              variant="body2"
-                              color="text.secondary"
-                              component="span"
-                              sx={{ display: 'block' }}
+                              variant="body1"
+                              component="pre"
+                              sx={{
+                                whiteSpace: 'pre-wrap',
+                                textOverflow: 'ellipsis',
+                              }}
                             >
-                              Allowed Tenants: {room.allowedTenants}
+                              {room.description}
                             </Typography>
-                            <Typography
-                              variant="body2"
-                              color="text.secondary"
-                              component="span"
+                            <Box mt={2}>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                component="span"
+                                sx={{ display: 'block' }}
+                              >
+                                Allowed Tenants: {room.allowedTenants}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                component="span"
+                              >
+                                Price: ₱{room.prize}
+                              </Typography>
+                            </Box>
+                          </CardContent>
+                          <CardActions sx={{ verticalAlign: 'end' }}>
+                            <Button
+                              variant="contained"
+                              startIcon={<EditIcon />}
+                              onClick={() => {
+                                setRoomPopup(true);
+                                setRoom(room);
+                                setNewRoom(false);
+                                setSelectedMenu('Update Room');
+                              }}
                             >
-                              Price: ₱{room.prize}
-                            </Typography>
-                          </Box>
-                        </CardContent>
-                        <CardActions sx={{ verticalAlign: 'end' }}>
-                          <Button
-                            variant="contained"
-                            startIcon={<EditIcon />}
-                            onClick={() => {
-                              setRoomPopup(true);
-                              setRoom(room);
-                              setNewRoom(false);
-                              setSelectedMenu('Update Room');
-                            }}
-                          >
-                            Update Room
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            startIcon={<DeleteIcon />}
-                            onClick={() => {
-                              setOpenDeletePopup(true);
-                              setToDelete(room?._id);
-                              setSelectedMenu('Delete Room');
-                            }}
-                          >
-                            Delete Room
-                          </Button>
-                        </CardActions>
-                      </Card>
-                    </Grid>
-                  );
-                })}
-              </Grid>
+                              Update Room
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              color="error"
+                              startIcon={<DeleteIcon />}
+                              onClick={() => {
+                                setOpenDeletePopup(true);
+                                setToDelete(room?._id);
+                                setSelectedMenu('Delete Room');
+                              }}
+                            >
+                              Delete Room
+                            </Button>
+                          </CardActions>
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Paper>
             </Grid>
           )}
         </Grid>

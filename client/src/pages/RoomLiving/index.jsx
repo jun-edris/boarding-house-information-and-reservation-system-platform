@@ -138,7 +138,7 @@ const RoomLiving = () => {
                     return history(`/home/living`);
                 }}
               >
-                <ArrowBackIcon />
+                <ArrowBackIcon sx={{ color: 'white' }} />
               </IconButton>
               <Button
                 variant="contained"
@@ -174,69 +174,80 @@ const RoomLiving = () => {
                 <Box mt={1}>
                   <Grid container spacing={2} alignItems="stretch">
                     <Grid item xs={12} lg={9}>
-                      <Box
+                      <Paper
+                        variant="outlined"
                         sx={{
+                          p: 3,
+                          height: '100%',
                           display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          marginBottom: 2,
+                          flexDirection: 'column',
                         }}
                       >
                         <Box>
-                          <Typography variant="h5" component="h6">
-                            {room?.roomName}
-                          </Typography>
-                          <Typography variant="body2">
-                            {room?.roomType}
-                          </Typography>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              marginBottom: 2,
+                            }}
+                          >
+                            <Box>
+                              <Typography variant="h5" component="h6">
+                                {room?.roomName}
+                              </Typography>
+                              <Typography variant="body2">
+                                {room?.roomType}
+                              </Typography>
+                            </Box>
+
+                            <Box>
+                              <Typography variant="body2" component="p">
+                                Tenants Living Including You
+                              </Typography>
+                              <AvatarGroup max={room?.tenants?.length + 2}>
+                                {room?.tenants?.map((tenant) => (
+                                  <Avatar
+                                    key={tenant?._id}
+                                    alt={tenant?.firstName}
+                                    src={tenant?.image}
+                                  />
+                                ))}
+                              </AvatarGroup>
+                            </Box>
+                          </Box>
+                          <Box mb={2}>
+                            <Alert icon={false} severity="success">
+                              <AlertTitle>
+                                <Typography variant="overline">
+                                  Your reservation is up until:
+                                </Typography>
+                              </AlertTitle>
+                              <Typography>
+                                {dateToLeave.toDateString()}
+                              </Typography>
+                            </Alert>
+                          </Box>
+                          <Divider />
                         </Box>
 
-                        <Box>
-                          <Typography variant="body2" component="p">
-                            Tenants Living Including You
-                          </Typography>
-                          <AvatarGroup max={room?.tenants?.length + 2}>
-                            {room?.tenants?.map((tenant) => (
-                              <Avatar
-                                key={tenant?._id}
-                                alt={tenant?.firstName}
-                                src={tenant?.image}
-                              />
-                            ))}
-                          </AvatarGroup>
-                        </Box>
-                      </Box>
-                      <Box mb={2}>
-                        <Alert
-                          icon={false}
-                          variant="outlined"
-                          severity="success"
-                        >
-                          <AlertTitle>
-                            <Typography variant="overline">
-                              Your reservation is up until:
-                            </Typography>
-                          </AlertTitle>
-                          <Typography>{dateToLeave.toDateString()}</Typography>
-                        </Alert>
-                      </Box>
-                      <Divider />
-                      <Box
-                        sx={{
-                          marginTop: 2,
-                        }}
-                      >
-                        <Typography
+                        <Box
                           sx={{
-                            width: '100%',
-                            minWidth: '100%',
-                            boxSizing: 'border-box',
-                            overflow: 'auto',
+                            marginTop: 2,
                           }}
                         >
-                          {room?.description}
-                        </Typography>
-                      </Box>
+                          <Typography
+                            sx={{
+                              width: '100%',
+                              minWidth: '100%',
+                              boxSizing: 'border-box',
+                              overflow: 'auto',
+                            }}
+                          >
+                            {room?.description}
+                          </Typography>
+                        </Box>
+                      </Paper>
                     </Grid>
                     <Grid item xs={12} lg={3}>
                       <Paper
@@ -277,54 +288,56 @@ const RoomLiving = () => {
               </Grid>
             </Grid>
             <Box mt={2} mb={2}>
-              <Alert variant="outlined" severity="info" sx={{ width: '100%' }}>
+              <Alert severity="info" sx={{ width: '100%' }}>
                 <AlertTitle>Landmark where you can pay your rent.</AlertTitle>
                 {room?.boardingHouse?.landmark}
               </Alert>
             </Box>
             <Divider />
             <Box mt={4} mb={4}>
-              <Typography variant="h5" component="h6">
-                Room feedback from the tenants
-              </Typography>
-              <Box>
-                {reviews?.map((review) => (
-                  <Box key={review?._id}>
-                    <Box
-                      mt={4}
-                      pb={2}
-                      sx={{
-                        display: 'flex',
-                        gap: 2,
-                      }}
-                    >
-                      <Box>
-                        <Avatar src={review?.tenant?.image} />
+              <Paper sx={{ p: 3 }}>
+                <Typography variant="h5" component="h6">
+                  Room feedback from the tenants
+                </Typography>
+                <Box>
+                  {reviews?.map((review) => (
+                    <Box key={review?._id}>
+                      <Box
+                        mt={4}
+                        pb={2}
+                        sx={{
+                          display: 'flex',
+                          gap: 2,
+                        }}
+                      >
+                        <Box>
+                          <Avatar src={review?.tenant?.image} />
+                        </Box>
+                        <Box>
+                          <Typography
+                            variant="body1"
+                            sx={{ textTransform: 'capitalize' }}
+                          >
+                            {review?.tenant?.firstName}{' '}
+                            {review?.tenant?.lastName.substr(0, 1)}.
+                          </Typography>
+                          <ReactStars
+                            count={5}
+                            value={review?.rating}
+                            edit={false}
+                            size={16}
+                            color2="#ffd700"
+                          />
+                          <Typography variant="body2" sx={{ marginTop: 2 }}>
+                            {review?.description}
+                          </Typography>
+                        </Box>
                       </Box>
-                      <Box>
-                        <Typography
-                          variant="body1"
-                          sx={{ textTransform: 'capitalize' }}
-                        >
-                          {review?.tenant?.firstName}{' '}
-                          {review?.tenant?.lastName.substr(0, 1)}.
-                        </Typography>
-                        <ReactStars
-                          count={5}
-                          value={review?.rating}
-                          edit={false}
-                          size={16}
-                          color2="#ffd700"
-                        />
-                        <Typography variant="body2" sx={{ marginTop: 2 }}>
-                          {review?.description}
-                        </Typography>
-                      </Box>
+                      <Divider />
                     </Box>
-                    <Divider />
-                  </Box>
-                ))}
-              </Box>
+                  ))}
+                </Box>
+              </Paper>
             </Box>
           </Box>
         </Container>
