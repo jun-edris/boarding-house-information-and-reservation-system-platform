@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Paper,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { FetchContext } from './../../context/FetchContext';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
@@ -288,7 +280,9 @@ const Dashboard = () => {
                   </Grid>
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                  <Typography variant="h5">Boarding House</Typography>
+                  <Typography variant="h5" color="white">
+                    Boarding House
+                  </Typography>
                   <Grid container spacing={2} sx={{ mt: 0.5 }}>
                     <Grid item xs={12} xl>
                       <DisplayCount

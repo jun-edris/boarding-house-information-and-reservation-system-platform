@@ -114,7 +114,32 @@ const BoardingHouseDetails = () => {
     <>
       <div>
         <Box>
-          <Container maxWidth="xl">
+          <Box
+            sx={{
+              background: `url(/home.jpg)`,
+              height: 500,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                zIndex: 1,
+              },
+            }}
+          ></Box>
+          <Container
+            maxWidth="xl"
+            sx={{ mt: '-420px', zIndex: 2, position: 'relative', pb: 10 }}
+          >
             <Box pt={5} pb={10}>
               <Box
                 mb={3}
@@ -198,13 +223,48 @@ const BoardingHouseDetails = () => {
               </Box>
               <Grid container spacing={2} sx={{ marginBottom: 4 }}>
                 <Grid item xs={12}>
-                  <img
-                    src={bHouse?.image}
-                    alt={bHouse?.houseName}
-                    width="100%"
-                    height={650}
-                    style={{ borderRadius: 20 }}
-                  />
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ height: '650', position: 'relative', width: '100%' }}
+                  >
+                    <Grid item xs={12} lg={5}>
+                      <img
+                        src={bHouse?.image}
+                        alt={bHouse?.houseName}
+                        width="100%"
+                        height="100%"
+                      />
+                    </Grid>
+                    <Grid item xs={12} lg={7} sx={{ height: '100%' }}>
+                      <Grid container spacing={2}>
+                        {bHouse?.rooms?.map((room, index) => {
+                          return (
+                            <Grid item key={index} xs={12} md>
+                              <Card sx={{}}>
+                                {room?.image ? (
+                                  <CardMedia
+                                    component="img"
+                                    width="100%"
+                                    height="100%"
+                                    image={room?.image}
+                                    alt={bHouse?.houseName}
+                                  />
+                                ) : (
+                                  <Box height="100%" width="100%">
+                                    <Typography variant="body2">
+                                      No image
+                                    </Typography>
+                                  </Box>
+                                )}
+                              </Card>
+                            </Grid>
+                          );
+                        })}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
                   <Box mt={1}>
                     <Grid container spacing={2} alignItems="stretch">
                       <Grid item xs={12} lg={9}>

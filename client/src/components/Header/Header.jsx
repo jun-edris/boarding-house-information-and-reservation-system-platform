@@ -137,9 +137,9 @@ const Header = () => {
 
   return (
     <>
-      <AppBar position="sticky" color="" sx={{ py: 1 }}>
+      <AppBar position="sticky" elevation={0} color="" sx={{ py: 1 }}>
         <Container maxWidth={false}>
-          <Toolbar>
+          <Toolbar variant="dense">
             <Box sx={{ flexGrow: 1 }}>
               <Link
                 to={
@@ -148,7 +148,7 @@ const Header = () => {
                     : '/home'
                 }
               >
-                <Logo />
+                <Logo wid={55} />
               </Link>
             </Box>
 
@@ -187,26 +187,6 @@ const Header = () => {
                   </Badge>
                 </Paper>
               </Tooltip>
-              {Object.keys(authContext.authState.userInfo).length > 0 && (
-                <Box
-                  sx={{
-                    flexGrow: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <Typography
-                    variant="subtitle1"
-                    component="h6"
-                    sx={{ textTransform: 'capitalize' }}
-                  >{`${authContext.authState.userInfo.firstName} ${authContext.authState.userInfo.lastName}`}</Typography>
-                  <Typography
-                    variant="body2"
-                    component="span"
-                  >{`${authContext.authState.userInfo.role}`}</Typography>
-                </Box>
-              )}
 
               <Tooltip title="Open settings">
                 <Paper
@@ -217,12 +197,10 @@ const Header = () => {
                     py: 1,
                     px: 1,
                     gap: 1.5,
-                    borderRadius: 28,
                     cursor: 'pointer',
                   }}
                   onClick={handleOpenUserMenu}
                 >
-                  <MenuIcon fontSize="small" />
                   {Object.keys(authContext.authState.userInfo).length > 0 ? (
                     <Avatar
                       alt={
@@ -241,6 +219,26 @@ const Header = () => {
                     <Avatar>
                       <AccountCircleIcon />
                     </Avatar>
+                  )}
+                  {Object.keys(authContext.authState.userInfo).length > 0 && (
+                    <Box
+                      sx={{
+                        flexGrow: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        component="h6"
+                        sx={{ textTransform: 'capitalize' }}
+                      >{`${authContext.authState.userInfo.firstName} ${authContext.authState.userInfo.lastName}`}</Typography>
+                      {/* <Typography
+                        variant="body2"
+                        component="span"
+                      >{`${authContext.authState.userInfo.role}`}</Typography> */}
+                    </Box>
                   )}
                 </Paper>
               </Tooltip>

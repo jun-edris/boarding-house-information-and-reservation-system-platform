@@ -119,7 +119,32 @@ const RoomLiving = () => {
   return (
     <div>
       <Box>
-        <Container maxWidth="xl">
+        <Box
+          sx={{
+            background: `url(/home.jpg)`,
+            height: 500,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              zIndex: 1,
+            },
+          }}
+        ></Box>
+        <Container
+          maxWidth="xl"
+          sx={{ mt: '-420px', zIndex: 2, position: 'relative' }}
+        >
           <Box pt={5} pb={10}>
             <Box
               mb={3}
@@ -169,7 +194,6 @@ const RoomLiving = () => {
                   alt={room?.roomName}
                   width="100%"
                   height={650}
-                  style={{ borderRadius: 20 }}
                 />
                 <Box mt={1}>
                   <Grid container spacing={2} alignItems="stretch">

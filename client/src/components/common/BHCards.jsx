@@ -13,8 +13,6 @@ import { AuthContext } from '../../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    display: 'flex',
-    borderRadius: 16,
     overflow: 'hidden',
     boxSizing: 'border-box',
     boxShadow: '0px 14px 80px rgba(34, 35, 58, 0.2)',
@@ -34,12 +32,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-start',
   },
   media: {
-    width: 270,
+    width: '100%',
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: theme.spacing(2),
   },
   address: {
     fontSize: 14,
@@ -50,9 +47,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 16,
     color: theme.palette.grey[700],
     marginTop: theme.spacing(1),
-  },
-  button: {
-    marginTop: theme.spacing(2),
   },
 }));
 
@@ -65,12 +59,21 @@ const BHCards = ({ name, address, description, id, img }) => {
     <>
       <Card className={classes.card}>
         {img ? (
-          <CardMedia
-            component="img"
-            image={img ? img : ''}
-            alt={name}
-            className={classes.media}
-          />
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              height: 230,
+              overflow: 'hidden',
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={img ? img : ''}
+              alt={name}
+              className={classes.media}
+            />
+          </Box>
         ) : (
           <Box>
             <Typography variant="body2">No image</Typography>
@@ -89,21 +92,11 @@ const BHCards = ({ name, address, description, id, img }) => {
             >
               {address}
             </Typography>
-            <Typography
-              className={classes.description}
-              variant="body1"
-              sx={{
-                boxSizing: 'border-box',
-                whiteSpace: 'pre-wrap',
-              }}
-            >
-              {description}
-            </Typography>
           </Box>
 
           <Button
             type="button"
-            className={classes.button}
+            sx={{ mt: 4 }}
             color="primary"
             variant="contained"
             onClick={() => {
