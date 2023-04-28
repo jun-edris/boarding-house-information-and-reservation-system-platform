@@ -10,7 +10,7 @@ import {
   Paper,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const DialogContainer = ({
   title,
@@ -23,6 +23,13 @@ const DialogContainer = ({
   nextPopupTitle,
 }) => {
   const [accept, setAccept] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setAccept(false); // Reset the state when the modal is closed
+    }
+  }, [open]);
+
   return (
     <Dialog
       open={open}
@@ -36,7 +43,19 @@ const DialogContainer = ({
         {children}
         {scroll && (
           <FormControlLabel
-            control={<Checkbox onChange={() => setAccept(!accept)} />}
+            control={
+              <Checkbox
+                value={accept}
+                onChange={() => {
+                  if (accept === true) {
+                    return setAccept(false);
+                  }
+                  if (accept === false) {
+                    return setAccept(true);
+                  }
+                }}
+              />
+            }
             label="Accept Terms and Conditions"
           />
         )}
@@ -46,7 +65,7 @@ const DialogContainer = ({
           <Button
             variant="contained"
             fullWidth
-            disabled={accept === false ? true : false}
+            disabled={!accept}
             onClick={() => {
               onClose();
               setOpenPopup(true);

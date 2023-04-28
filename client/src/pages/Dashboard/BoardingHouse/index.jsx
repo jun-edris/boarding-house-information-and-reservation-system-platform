@@ -305,7 +305,9 @@ const BoardingHouse = () => {
         </Grid>
       ) : (
         <>
-          <Typography sx={{ mt: 3 }}>Nothing to display yet...</Typography>
+          <Typography sx={{ mt: 3, color: 'white' }}>
+            Nothing to display yet...
+          </Typography>
         </>
       )}
 
@@ -324,7 +326,11 @@ const BoardingHouse = () => {
             <Typography variant="h5" align="center">
               Conditions and terms
             </Typography>
-            <Typography variant="h5" align="center">
+            <Typography
+              variant="h5"
+              align="center"
+              sx={{ fontStyle: 'italic' }}
+            >
               (Admin and Boarding House Owner)
             </Typography>
             <Typography variant="h4" align="center" sx={{ mt: 2 }}>
@@ -334,8 +340,7 @@ const BoardingHouse = () => {
           </Box>
           <Box my={3}>
             <ol>
-              <li>This is a legally binding contract.</li>
-              <li>This agreement is for use by a boarding house owner only.</li>
+              <li>This agreement is used for boarding house owners only.</li>
             </ol>
             <p style={{ textIndent: '60px', fontWeight: 'bold' }}>
               A boarding house landlady or landlord must:
@@ -345,47 +350,24 @@ const BoardingHouse = () => {
                 contain one or more boarding rooms, where tenants have exclusive
                 rights to occupy particular sleep quarters.
               </li>
-              <li>have communal facilities for shared use by the tenants</li>
-              <li>
-                be occupied or intended by the landlord to be occupied by at
-                least six tenants.
-              </li>
-              <li>
-                be intended to, or in fact does, last for 28 days or more.
-              </li>
             </ul>
-            <ol start={3}>
+            <ol start={2}>
               <li>
-                This agreement must be completed in full and signed by the
-                tenant and landlord. The parties must record their full names
-                correctly.
-              </li>
-              <li>
-                The landlady or landlord must include a signed statement with
-                any boarding house landlady or landlord agreement that covers
-                what insulation a property has in the ceilings, floors, and
-                walls, including where it is, what type it is, and what
-                condition it is in.
-              </li>
-              <li>
-                The landlady or landlord must also provide a statement to
-                confirm they will comply, or already comply, with the healthy
-                home standards. This statement can be combined with the Healthy
-                Homes Standards Compliance Statement with one signature.
+                The landlady or landlord must provide a statement to confirm
+                they will comply, or already comply, with the healthy home
+                standards (sanitary permit).
               </li>
               <li>
                 The landlady or landlord must sign a statement about whether the
-                property is insured and, if so, what the excess is. The landlady
-                or landlord must also include a statement informing tenants that
-                the insurance policy for the property is available on request.
+                property is registered and provide proof.
               </li>
               <li>
-                The landlady or landlord must <strong>comply</strong> with all
-                the{' '}
+                The landlady or landlord must comply with all{' '}
                 <strong>
-                  BOARDING HOUSE INFORMATION AND RESERVATION SYSTEM PLATFORM
+                  the BOARDING HOUSE INFORMATION AND RESERVATION SYSTEM PLATFORM
+                  agreements,
                 </strong>{' '}
-                agreements, such as{' '}
+                such as{' '}
                 <strong>
                   NBI Clearance, License Accreditation from BIR, Business
                   Permit, Fire Safety Inspection Certificate, Mayor’s Permit,
@@ -393,19 +375,22 @@ const BoardingHouse = () => {
                 </strong>
               </li>
               <li>
-                All Boarding House properties must meet the requirements in the
+                All boarding house properties must meet the requirements in the
                 regulations regarding insulation and smoke alarms.
               </li>
               <li>
-                Before signing this agreement, all parties should carefully read
-                it and seek information from Tenancy Services if they are
-                unclear about what they are agreeing to.
+                The landlady or landlord must provide a receipt to the tenant
+                after paying.
               </li>
               <li>
-                If a bond is paid, the landlady or landlord must immediately
-                provide a receipt to the tenant.
+                The landlady or landlord must be just and fair to all tenants.
               </li>
-              <li>Letting fees can’t be charged to tenants.</li>
+              <li>
+                Before signing this agreement, all boarding house owners should
+                carefully read it and seek information from the Boarding House
+                Information and Reservation System Platform admin if they are
+                unclear about what they are agreeing to.
+              </li>
             </ol>
           </Box>
           <Box>
@@ -419,24 +404,16 @@ const BoardingHouse = () => {
               <li>Agreement</li>
             </ol>
             <ul>
-              <li>Each party should keep a copy of this agreement.</li>
+              <li>This agreement is for all users.</li>
               <li>
-                Changes in the particulars of either party must be notified to
-                the other party within 10 working days.
+                Changes to any payment or rules must be notified directly.
               </li>
             </ul>
             <ol start={2}>
               <li>Rent</li>
             </ol>
             <ul>
-              <li>
-                The landlady or landlord shall not require rent to be paid more
-                than 2 weeks in advance or until rent already paid has been used
-                up.
-              </li>
-              <li>
-                Receipts must be given immediately if rent is paid in cash.
-              </li>
+              <li>Receipt must be provided if the tenant paid already.</li>
             </ul>
             <ol start={3}>
               <li>Boarding house owner responsibilities</li>
@@ -458,17 +435,7 @@ const BoardingHouse = () => {
                 Ensure the house rules and fire evacuation procedures are on
                 display in the boarding house at all times.
               </li>
-              <li>
-                Enforce the house rules in a fair and consistent manner and give
-                7 days written notice of any new house rules.
-              </li>
-              <li>
-                Pay rates and any insurance taken out by the landlady or
-                landlord.
-              </li>
-              <li>
-                Not interfere with the supply of any services to the premises.
-              </li>
+              <li>Enforce the house rules in a fair and consistent manner.</li>
             </ul>
             <ol start={4}>
               <li>Tenant’s responsibilities</li>
@@ -477,8 +444,7 @@ const BoardingHouse = () => {
               <li>Pay the rent on time.</li>
               <li>
                 Keep the boarding room reasonably clean and tidy, and notify the
-                landlady or landlord as soon as any repairs are needed. You may
-                not withhold rent if you cannot get repairs done.
+                landlady or landlord as soon as any repairs are needed.
               </li>
             </ul>
           </Box>

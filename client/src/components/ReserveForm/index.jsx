@@ -147,6 +147,10 @@ const ReserveForm = ({ rooms, onClose }) => {
               )
                 return toast.error('Dates should not be the same!');
 
+              if (room?.tenants?.length === room?.allowedTenants) {
+                return toast.error('Room is full!');
+              }
+
               const reserved = reserve(values);
 
               if (reserved) {
@@ -208,7 +212,7 @@ const ReserveForm = ({ rooms, onClose }) => {
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <FormControl fullWidth variant="filled">
-                        <InputLabel id="roomId">Room</InputLabel>
+                        <InputLabel id="roomId">Available Rooms</InputLabel>
                         <Select
                           error={Boolean(touched.roomId && errors.roomId)}
                           labelId="roomId"

@@ -34,6 +34,34 @@ const boardingHouseSchema = mongoose.Schema(
       type: String,
       default: '',
     },
+    nbi: {
+      type: String,
+      default: '',
+    },
+    accreBIR: {
+      type: String,
+      default: '',
+    },
+    bp: {
+      type: String,
+      default: '',
+    },
+    fireCert: {
+      type: String,
+      default: '',
+    },
+    mp: {
+      type: String,
+      default: '',
+    },
+    certReg: {
+      type: String,
+      default: '',
+    },
+    sp: {
+      type: String,
+      default: '',
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users',

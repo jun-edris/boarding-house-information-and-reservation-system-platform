@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertTitle,
   AppBar,
   Avatar,
   Badge,
@@ -311,9 +313,9 @@ const Header = () => {
                         history(`/${notif?.urlLink}`);
                       }}
                     >
-                      <Typography textAlign="center">
-                        {notif?.description}
-                      </Typography>
+                      <Alert severity="info">
+                        <AlertTitle>{notif?.description}</AlertTitle>
+                      </Alert>
                     </MenuItem>
                   ))
                 ) : (

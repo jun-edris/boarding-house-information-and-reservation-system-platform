@@ -25,8 +25,8 @@ export const pendingReserve = [
   { id: 'status', label: 'Status' },
   { id: 'name', label: 'Name' },
   { id: 'room', label: 'Room' },
-  { id: 'dateToLive', label: 'Date to Live' },
-  { id: 'dateToLeave', label: 'Date to Leave' },
+  { id: 'dateToLive', label: 'Start of Stay' },
+  { id: 'dateToLeave', label: 'End of Stay' },
   { id: 'action', label: 'Action' },
 ];
 
@@ -216,232 +216,237 @@ const PendingReservation = () => {
   return (
     <>
       <Box>
-        <Typography variant="h4">Reservation Request To Accept</Typography>
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {pendingReserve?.map((req, index) => (
-                  <TableCell
-                    className={classes.headerCell}
-                    key={req.id}
-                    align="center"
-                  >
-                    {req.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {pendingRToAccept?.map((pending, index) => {
-                const statusR =
-                  pending?.status === 'pendingToAccept' && 'Pending to Accept';
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h4">Reservation Request To Accept</Typography>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  {pendingReserve?.map((req, index) => (
+                    <TableCell
+                      className={classes.headerCell}
+                      key={req.id}
+                      align="center"
+                    >
+                      {req.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pendingRToAccept?.map((pending, index) => {
+                  const statusR =
+                    pending?.status === 'pendingToAccept' &&
+                    'Pending to Accept';
 
-                const liveDate = new Date(pending?.dateToLive);
-                const leaveDate = new Date(pending?.dateToLeave);
-                return (
-                  <TableRow key={pending?._id}>
-                    <TableCell className={classes.cell} align="center">
-                      <Chip label={statusR} color="warning" />
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.tenant?.firstName} {pending?.tenant?.lastName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.room?.roomName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {liveDate.toDateString()}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {leaveDate.toDateString()}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          gap: 2,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Button
-                          type="button"
-                          variant="contained"
-                          startIcon={
-                            loading ? <CircularProgress /> : <CheckIcon />
-                          }
-                          disabled={loading}
-                          onClick={() => {
-                            setLoading(true);
-                            const accepted = acceptReservation(
-                              pending?._id,
-                              pending?.tenant?._id,
-                              pending?.room?._id
-                            );
-                            if (accepted) {
-                              notifyTenant(
-                                pending?.tenant?._id,
-                                'acceptReservation'
-                              );
-                              deleteNotifLandlord(pending?.tenant?._id);
-                            }
+                  const liveDate = new Date(pending?.dateToLive);
+                  const leaveDate = new Date(pending?.dateToLeave);
+                  return (
+                    <TableRow key={pending?._id}>
+                      <TableCell className={classes.cell} align="center">
+                        <Chip label={statusR} color="warning" />
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.tenant?.firstName} {pending?.tenant?.lastName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.room?.roomName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {liveDate.toDateString()}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {leaveDate.toDateString()}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            gap: 2,
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
-                          Accept
-                        </Button>
-                        <Button
-                          color="error"
-                          variant="outlined"
-                          startIcon={
-                            loading ? (
-                              <CircularProgress />
-                            ) : (
-                              <DoNotDisturbIcon />
-                            )
-                          }
-                          disabled={loading}
-                          onClick={() => {
-                            setLoading(true);
-                            const declined = declineReservation(
-                              pending?._id,
-                              pending?.tenant?._id
-                            );
-
-                            if (declined) {
-                              notifyTenant(
-                                pending?.tenant?._id,
-                                'declineReservation'
-                              );
-                              deleteNotifLandlord(pending?.tenant?._id);
+                          <Button
+                            type="button"
+                            variant="contained"
+                            startIcon={
+                              loading ? <CircularProgress /> : <CheckIcon />
                             }
-                          }}
-                        >
-                          Decline
-                        </Button>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                            disabled={loading}
+                            onClick={() => {
+                              setLoading(true);
+                              const accepted = acceptReservation(
+                                pending?._id,
+                                pending?.tenant?._id,
+                                pending?.room?._id
+                              );
+                              if (accepted) {
+                                notifyTenant(
+                                  pending?.tenant?._id,
+                                  'acceptReservation'
+                                );
+                                deleteNotifLandlord(pending?.tenant?._id);
+                              }
+                            }}
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            color="error"
+                            variant="outlined"
+                            startIcon={
+                              loading ? (
+                                <CircularProgress />
+                              ) : (
+                                <DoNotDisturbIcon />
+                              )
+                            }
+                            disabled={loading}
+                            onClick={() => {
+                              setLoading(true);
+                              const declined = declineReservation(
+                                pending?._id,
+                                pending?.tenant?._id
+                              );
+
+                              if (declined) {
+                                notifyTenant(
+                                  pending?.tenant?._id,
+                                  'declineReservation'
+                                );
+                                deleteNotifLandlord(pending?.tenant?._id);
+                              }
+                            }}
+                          >
+                            Decline
+                          </Button>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Box>
 
       <Box mt={10}>
-        <Typography variant="h4">Reservation Request To Cancel</Typography>
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {pendingReserve?.map((req, index) => (
-                  <TableCell
-                    className={classes.headerCell}
-                    key={req.id}
-                    align="center"
-                  >
-                    {req.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {pendingRToCancel?.map((pending, index) => {
-                const statusR =
-                  pending?.status === 'pendingToLeave' && 'Pending to Cancel';
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h4">Reservation Request To Cancel</Typography>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  {pendingReserve?.map((req, index) => (
+                    <TableCell
+                      className={classes.headerCell}
+                      key={req.id}
+                      align="center"
+                    >
+                      {req.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pendingRToCancel?.map((pending, index) => {
+                  const statusR =
+                    pending?.status === 'pendingToLeave' && 'Pending to Cancel';
 
-                const liveDate = new Date(pending?.dateToLive);
-                const leaveDate = new Date(pending?.dateToLeave);
-                return (
-                  <TableRow key={pending?._id}>
-                    <TableCell className={classes.cell} align="center">
-                      <Chip label={statusR} color="warning" />
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.tenant?.firstName} {pending?.tenant?.lastName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.room?.roomName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {liveDate.toDateString()}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {leaveDate.toDateString()}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          gap: 2,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Button
-                          type="button"
-                          variant="contained"
-                          startIcon={
-                            loading ? <CircularProgress /> : <CheckIcon />
-                          }
-                          disabled={loading}
-                          onClick={() => {
-                            setLoading(true);
-                            const accepted = acceptLeaveBH(
-                              pending?._id,
-                              pending?.tenant?._id,
-                              pending?.room?._id
-                            );
-
-                            if (accepted) {
-                              notifyTenant(
-                                pending?.tenant?._id,
-                                'acceptCancelation'
-                              );
-                              deleteNotifLandlord(pending?.tenant?._id);
-                            }
+                  const liveDate = new Date(pending?.dateToLive);
+                  const leaveDate = new Date(pending?.dateToLeave);
+                  return (
+                    <TableRow key={pending?._id}>
+                      <TableCell className={classes.cell} align="center">
+                        <Chip label={statusR} color="warning" />
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.tenant?.firstName} {pending?.tenant?.lastName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.room?.roomName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {liveDate.toDateString()}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {leaveDate.toDateString()}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            gap: 2,
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}
                         >
-                          Accept
-                        </Button>
-                        <Button
-                          color="error"
-                          variant="outlined"
-                          startIcon={
-                            loading ? (
-                              <CircularProgress />
-                            ) : (
-                              <DoNotDisturbIcon />
-                            )
-                          }
-                          disabled={loading}
-                          onClick={() => {
-                            setLoading(true);
-                            const declined = declineLeaveBH(
-                              pending?._id,
-                              pending?.tenant?._id
-                            );
-
-                            if (declined) {
-                              notifyTenant(
-                                pending?.tenant?._id,
-                                'declineCancelation'
-                              );
-                              deleteNotifLandlord(pending?.tenant?._id);
+                          <Button
+                            type="button"
+                            variant="contained"
+                            startIcon={
+                              loading ? <CircularProgress /> : <CheckIcon />
                             }
-                          }}
-                        >
-                          Decline
-                        </Button>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                            disabled={loading}
+                            onClick={() => {
+                              setLoading(true);
+                              const accepted = acceptLeaveBH(
+                                pending?._id,
+                                pending?.tenant?._id,
+                                pending?.room?._id
+                              );
+
+                              if (accepted) {
+                                notifyTenant(
+                                  pending?.tenant?._id,
+                                  'acceptCancelation'
+                                );
+                                deleteNotifLandlord(pending?.tenant?._id);
+                              }
+                            }}
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            color="error"
+                            variant="outlined"
+                            startIcon={
+                              loading ? (
+                                <CircularProgress />
+                              ) : (
+                                <DoNotDisturbIcon />
+                              )
+                            }
+                            disabled={loading}
+                            onClick={() => {
+                              setLoading(true);
+                              const declined = declineLeaveBH(
+                                pending?._id,
+                                pending?.tenant?._id
+                              );
+
+                              if (declined) {
+                                notifyTenant(
+                                  pending?.tenant?._id,
+                                  'declineCancelation'
+                                );
+                                deleteNotifLandlord(pending?.tenant?._id);
+                              }
+                            }}
+                          >
+                            Decline
+                          </Button>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Box>
 
       <ToastContainer

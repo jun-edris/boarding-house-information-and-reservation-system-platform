@@ -107,6 +107,17 @@ const BoardingHouseDetails = () => {
     const controller = new AbortController();
     getApprovedBH();
 
+    const reserveChannel = authContext.pusher.subscribe('reserve');
+
+    reserveChannel.bind('reserve', (res) => {
+      getApprovedBH();
+      // setRecords(
+      // 	records.map((request) =>
+      // 		request._id === updateReq._id ? { ...records, updateReq } : request
+      // 	)
+      // );
+      fetchContext.setRefreshKey((fetchContext.refreshKey = +1));
+    });
     return () => controller.abort();
   }, [fetchContext.refreshKey]);
 
@@ -241,7 +252,7 @@ const BoardingHouseDetails = () => {
                         {bHouse?.rooms?.map((room, index) => {
                           return (
                             <Grid item key={index} xs={12} md>
-                              <Card sx={{}}>
+                              <Card>
                                 {room?.image ? (
                                   <CardMedia
                                     component="img"
@@ -461,173 +472,175 @@ const BoardingHouseDetails = () => {
           <UserAgreement>
             <Box>
               <Typography variant="h4" align="center">
-                CONDITIONS
+                Conditions and terms
               </Typography>
+              <Typography
+                variant="h4"
+                align="center"
+                sx={{ fontStyle: 'italic' }}
+              >
+                (Boarding House Owner & Tenant)
+              </Typography>
+              <Typography variant="h4" align="center" sx={{ mt: 4 }}>
+                BOARDING HOUSE INFORMATION AND RESERVATION SYSTEM PLATFORM
+                AGREEMENT
+              </Typography>
+            </Box>
+            <Box my={3}>
+              <Typography variant="h5">GENERAL RULES:</Typography>
+              <ol>
+                <li>Tenant should pay 50% advance before occupying a room.</li>
+                <li>
+                  If the tenant does not pursue reserving the room, the money
+                  (downpayment) cannot be refunded.
+                </li>
+                <li>
+                  Tenants should not bring any pets to the boarding house.
+                </li>
+                <li>
+                  Smoking inside the boarding house is strictly prohibited.
+                </li>
+                <li>
+                  Boys are not permitted to enter the girls' room, and girls are
+                  not permitted to enter the boys' room.
+                </li>
+                <li>Dating inside the boarding house room is not allowed.</li>
+                <li>Avoid disturbing others. Respect is a must.</li>
+              </ol>
+            </Box>
+            <Typography variant="h4">BOARDING HOUSE RULES:</Typography>
+            <Box my={3}>
+              <Typography variant="h5">WITHIN THE PREMISES:</Typography>
+              <ul>
+                <li>No smoking, naked flames, or burning candles inside.</li>
+                <li>
+                  Visitors are allowed but only entertain in the common area.
+                </li>
+                <li>No overnight stay for visitors.</li>
+                <li>Observed QUITE TIME starting at 9:00 P.M.</li>
+                <li>Turn OFF the light when not in use.</li>
+                <li>Respect everyone.</li>
+              </ul>
+            </Box>
+            <Box my={3}>
+              <Typography variant="h5">CLEANLINESS:</Typography>
+              <ul>
+                <li>
+                  Maintain a clean environment inside and outside your rooms.
+                </li>
+                <li>
+                  Please, wipe the dining table dry after use. If needed please
+                  sweep the floor for any fallen food crumbs.
+                </li>
+                <li>
+                  Please throw your garbage at the garbage bin and bring it
+                  downstairs at the end of the week.
+                </li>
+                <li>Please make sure the toilet is clean after use.</li>
+                <li>No shoes allowed inside the house.</li>
+                <li>
+                  Practice <strong>CLAYGO</strong>. Clean As You Go. Your fellow
+                  boarders/tenant are not your personal house cleaners.
+                </li>
+              </ul>
+            </Box>
+            <Box my={3}>
+              <Typography variant="h5">WATER AND ELECTRICITY:</Typography>
+              <ul>
+                <li>Please, make sure to turn off the faucet after use.</li>
+                <li>Please, switch off lights when not in use.</li>
+                <li>
+                  Please unplug your chargers when not in use and before going
+                  to bed. NO OVERNIGHT CHARGING, as this may cause overheating
+                  and possibly a fire.
+                </li>
+                <li>
+                  Each room is limited to one rice cooker; additional rice
+                  cookers are subject to a fee.
+                </li>
+                <li>Please, make sure to turn off the Gas stove after use. </li>
+              </ul>
+            </Box>
+            <Box my={3}>
+              <Typography variant="h5">CURFEW:</Typography>
+              <ul>
+                <li>From 9:30 P.M. to 5 A.M.</li>
+                <li>
+                  Gate will be closed after 15 minutes to the curfew hours.
+                </li>
+              </ul>
+            </Box>
+            <Box my={3}>
+              <Typography variant="h5" align="center">
+                NOTE:
+              </Typography>
+            </Box>
+            <Box my={3}>
+              <Typography
+                variant="h5"
+                sx={{ fontStyle: 'italic' }}
+                align="center"
+              >
+                RULES OF THE BOARDING HOUSE MIGHT BE CHANGED ACCORDING TO THE
+                BOARDING HOUSE OWNER.
+              </Typography>
+            </Box>
+            <Box my={10}>
               <Typography variant="h4" align="center">
-                (TENANT & BOARDING HOUSE OWNER)
+                OUTLINE OF THE BOARDING HOUSE INFORMATION AND RESERVATION SYSTEM
+                PLATFORM AGREEMENT
               </Typography>
             </Box>
             <Box my={3}>
-              <Typography variant="h5">1. Scope</Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                The legal relationship between the tenant and the boarding house
-                owner is governed by these terms and conditions. You accept
-                legal responsibility and acknowledge the content of these terms
-                by confirming your reservation.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">
-                2. Request for Reservation or Contract
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                2.1 By submitting your request, you agree to a legally binding
-                contract. You can make your reservation in writing, orally, or
-                over the phone. Your request is not yet acceptable, but it
-                entitles you to enter into a contract with the boarding house
-                owner.
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                2.2 The contract between you and the landlord is only formed
-                when the Boarding House System Information and Reservation
-                Platform Admin confirms your booking request in writing or by
-                e-mail and you accept the terms and conditions
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">3. Prices and Services</Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                3.1 The scope of the contractual services and the resulting
-                prices are derived from the offer's terms of reference and the
-                information in the reservation confirmation. The rate includes
-                the costs of electricity, water, heating, and cleaning.
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                3.2 The agreed-upon prices include any applicable VAT.
-                Specifications will be made in the confirmation of the
-                reservation if there are discrepancies between the information
-                in the offer and the information in the booking confirmation.
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                3.3 The contract is final and will not be modified as a
-                consequence of late arrival and/or early departure due to
-                illness or other reasons; the responsibility will not be assumed
-                by the landlord or Boarding House System Information and
-                Reservation Platform Admin for the reasons stated previously,
-                and you will not be entitled to a proportional refund.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">4. Payment</Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                4.1 The total amount of your stay must be paid in full or by
-                credit card at the time of check-in.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">
-                5. Cancellation by the tenant and the cost of cancellation
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                5.1 You have the right to cancel your reservation at any time.
-                We recommend that the decision to withdraw be made in writing
-                for reasons of proof. In the event of withdrawal, we have the
-                right to seek reimbursement from you for our expenses.
-              </Typography>
-              <Box sx={{ marginTop: 2 }}>
-                <Typography>
-                  5.2 If the reservation is canceled, the following cancellation
-                  fees will be assessed:
-                </Typography>
-                <Typography sx={{ pl: 5, marginTop: 2 }}>
-                  a. According to the concluded contract, free cancellation of
-                  the reservation before the start of the schedule period
-                  (planned arrival) is possible for reservations up to 1 week
-                  per room.
-                </Typography>
-              </Box>
-              <Typography sx={{ marginTop: 2 }}>
-                5.3 The calculation is based on the agreed-upon total price. The
-                receipt of your resignation from us is decisive for the
-                staggering. The proof of a lesser failure is still with you.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">
-                6. Subletting/tenant replacement
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                6.1 It is prohibited to sublet or re-let the rented object, as
-                well as to use it for purposes other than accommodations.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">
-                6. Withdrawal from the landlord
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                7.1 If an advance payment has been agreed upon;
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                A. If the required payment following a lapse is not made within
-                the grace period allowed by the Boarding House System
-                Information and Reservation Platform Admin, the lessor has the
-                right to withdraw from the entitled contract.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">
-                8. Accommodation/Taking Over/Return
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                8.1 Keys are distributed upon arrival, either personally or
-                through an automated key dispenser system. More information is
-                available directly from the Boarding House System Information
-                and Reservation Platform Admin.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">
-                9. Asset/Obligation to Cooperate/Warranty/Claim Exclusion
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                9.1 As a tenant of the property, you and any co-users agree to
-                take care of the property and its associated inventory. You are
-                responsible for any missing or damaged items as well as
-                inventory. Boarding House System Information and Reservation
-                Platform Admin reserves all rights.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">10. Miscellaneous</Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                10.1 Noise Pollution: Avoid disturbing your neighbors. Please
-                allow for normal and appropriate background noise, such as that
-                produced by construction workers. We are not liable for any
-                extra noise caused by road works or other activities outside the
-                building's boundaries. There is no such thing as a right to
-                compensation.
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                10.2 Pets are not permitted.
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                10.3 Valuables: There is no liability for valuables that are
-                lost or stolen. As a precaution, make sure you have liability
-                insurance and personal liability insurance in case of damage.
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                10.4 Smoking is prohibited throughout the property.
-              </Typography>
-            </Box>
-            <Box my={3}>
-              <Typography variant="h5">
-                11. Individual clauses are invalid.
-              </Typography>
-              <Typography sx={{ marginTop: 2 }}>
-                Individual provisions that are invalid do not invalidate the
-                overall business result conditions.
-              </Typography>
+              <ol>
+                <li>Agreement</li>
+              </ol>
+              <ul>
+                <li>This agreement is for all users.</li>
+                <li>
+                  Changes to any payment or rules must be notified directly.
+                </li>
+              </ul>
+              <ol start={2}>
+                <li>Rent</li>
+              </ol>
+              <ul>
+                <li>Receipt must be provided if the tenant paid already.</li>
+              </ul>
+              <ol start={3}>
+                <li>Boarding house owner responsibilities</li>
+              </ol>
+              <ul>
+                <li>Provide a room in a reasonable state of cleanliness.</li>
+                <li>
+                  Provide and maintain the boarding house in a reasonable state
+                  of repair and comply with all building, health, and safety
+                  requirements that apply to the premises.
+                </li>
+                <li>Allow the tenant quiet enjoyment of the room.</li>
+                <li>
+                  Ensure the tenant has access to the room, toilet, and bathroom
+                  facilities at all times and to other facilities at all
+                  reasonable hours.
+                </li>
+                <li>
+                  Ensure the house rules and fire evacuation procedures are on
+                  display in the boarding house at all times.
+                </li>
+                <li>
+                  Enforce the house rules in a fair and consistent manner.
+                </li>
+              </ul>
+              <ol start={4}>
+                <li>Tenant’s responsibilities</li>
+              </ol>
+              <ul>
+                <li>Pay the rent on time.</li>
+                <li>
+                  Keep the boarding room reasonably clean and tidy, and notify
+                  the landlady or landlord as soon as any repairs are needed
+                </li>
+              </ul>
             </Box>
           </UserAgreement>
         </DialogContainer>
@@ -665,7 +678,14 @@ const BoardingHouseDetails = () => {
                 </Box>
 
                 <Chip
-                  label={room?.available ? 'Available' : 'Occupied'}
+                  label={
+                    room?.tenants?.length === room?.allowedTenants
+                      ? 'Fully Booked'
+                      : room?.tenants.length > 0 &&
+                        room?.tenants.length !== room?.allowedTenants
+                      ? 'Partially Booked'
+                      : 'Available'
+                  }
                   color={room?.available ? 'success' : 'info'}
                 />
               </Box>
@@ -698,7 +718,12 @@ const BoardingHouseDetails = () => {
           open={openPopup}
           onClose={handleModalClose}
         >
-          <ReserveForm rooms={bHouse?.rooms} onClose={handleModalClose} />
+          <ReserveForm
+            rooms={bHouse?.rooms?.filter(
+              (room) => room?.allowedTenants !== room?.tenants?.length
+            )}
+            onClose={handleModalClose}
+          />
         </DialogContainer>
       </div>
       <ToastContainer

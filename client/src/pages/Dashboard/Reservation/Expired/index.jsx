@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import {
   Box,
-  Button,
   Chip,
   Paper,
   Table,
@@ -43,7 +42,6 @@ const ExpiredReservation = () => {
   const fetchContext = useContext(FetchContext);
   const authContext = useContext(AuthContext);
   const [expiredR, setExpiredR] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const expiredReservation = async () => {
     fetchContext.authAxios
@@ -93,49 +91,51 @@ const ExpiredReservation = () => {
   return (
     <>
       <Box>
-        <Typography variant="h4">Expired Reservation</Typography>
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {pendingReserve?.map((req, index) => (
-                  <TableCell
-                    className={classes.headerCell}
-                    key={req.id}
-                    align="center"
-                  >
-                    {req.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {expiredR?.map((pending, index) => {
-                const liveDate = new Date(pending?.dateToLive);
-                const leaveDate = new Date(pending?.dateToLeave);
-                return (
-                  <TableRow key={pending?._id}>
-                    <TableCell className={classes.cell} align="center">
-                      <Chip label={pending?.status} color="success" />
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h4">Expired Reservation</Typography>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  {pendingReserve?.map((req, index) => (
+                    <TableCell
+                      className={classes.headerCell}
+                      key={req.id}
+                      align="center"
+                    >
+                      {req.label}
                     </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.tenant?.firstName} {pending?.tenant?.lastName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.room?.roomName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {liveDate.toDateString()}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {leaveDate.toDateString()}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {expiredR?.map((pending, index) => {
+                  const liveDate = new Date(pending?.dateToLive);
+                  const leaveDate = new Date(pending?.dateToLeave);
+                  return (
+                    <TableRow key={pending?._id}>
+                      <TableCell className={classes.cell} align="center">
+                        <Chip label={pending?.status} color="success" />
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.tenant?.firstName} {pending?.tenant?.lastName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.room?.roomName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {liveDate.toDateString()}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {leaveDate.toDateString()}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Box>
       <ToastContainer theme="colored" />
     </>

@@ -6,7 +6,7 @@ import { AuthContext } from '../../context/AuthContext';
 const Logo = ({ wid }) => {
   return (
     <img
-      src="/logo.jpeg"
+      src="/logo.png"
       alt="Boarding House System Logo"
       width={wid ? wid : 90}
     />

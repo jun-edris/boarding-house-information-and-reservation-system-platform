@@ -44,36 +44,37 @@ const Tenant = () => {
   return (
     <>
       <Box>
-        <Typography variant="h4">List of All Tenant</Typography>
-
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {tenant.map((req, index) => (
-                  <TableCell key={index}>{req.label}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allTenant?.map((tenant, index) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>
-                      {tenant?.firstName} {tenant?.lastName}
-                    </TableCell>
-                    <TableCell>{tenant?.email}</TableCell>
-                    <TableCell>0{tenant?.contact}</TableCell>
-                    <TableCell>
-                      {tenant.barangay}, {tenant.city}, {tenant.province},{' '}
-                      {tenant.region}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h4">List of All Tenant</Typography>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {tenant.map((req, index) => (
+                    <TableCell key={index}>{req.label}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allTenant?.map((tenant, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>
+                        {tenant?.firstName} {tenant?.lastName}
+                      </TableCell>
+                      <TableCell>{tenant?.email}</TableCell>
+                      <TableCell>0{tenant?.contact}</TableCell>
+                      <TableCell>
+                        {tenant.barangay}, {tenant.city}, {tenant.province},{' '}
+                        {tenant.region}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Box>
     </>
   );

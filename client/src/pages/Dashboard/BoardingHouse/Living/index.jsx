@@ -19,14 +19,14 @@ import CheckIcon from '@mui/icons-material/Check';
 import { FetchContext } from '../../../../context/FetchContext';
 import { AuthContext } from '../../../../context/AuthContext';
 import theme from './../../../../constants/theme';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 export const pendingReserve = [
   { id: 'status', label: 'Status' },
   { id: 'name', label: 'Name' },
   { id: 'room', label: 'Room' },
-  { id: 'dateToLive', label: 'Date to Live' },
-  { id: 'dateToLeave', label: 'Date to Leave' },
+  { id: 'dateToLive', label: 'Start of Stay' },
+  { id: 'dateToLeave', label: 'End of Stay' },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -46,7 +46,6 @@ const LivingTenant = () => {
   const fetchContext = useContext(FetchContext);
   const authContext = useContext(AuthContext);
   const [reservedR, setReservedR] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const reservedReservation = async () => {
     fetchContext.authAxios
@@ -96,49 +95,51 @@ const LivingTenant = () => {
   return (
     <>
       <Box>
-        <Typography variant="h4">Tenants Living</Typography>
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {pendingReserve?.map((req, index) => (
-                  <TableCell
-                    className={classes.headerCell}
-                    key={req.id}
-                    align="center"
-                  >
-                    {req.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {reservedR?.map((pending, index) => {
-                const liveDate = new Date(pending?.dateToLive);
-                const leaveDate = new Date(pending?.dateToLeave);
-                return (
-                  <TableRow key={pending?._id}>
-                    <TableCell className={classes.cell} align="center">
-                      <Chip label={pending?.status} color="success" />
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h4">Tenants Living</Typography>
+          <TableContainer component={Paper} sx={{ mt: 3 }}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  {pendingReserve?.map((req, index) => (
+                    <TableCell
+                      className={classes.headerCell}
+                      key={req.id}
+                      align="center"
+                    >
+                      {req.label}
                     </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.tenant?.firstName} {pending?.tenant?.lastName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {pending?.room?.roomName}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {liveDate.toDateString()}
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                      {leaveDate.toDateString()}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {reservedR?.map((pending, index) => {
+                  const liveDate = new Date(pending?.dateToLive);
+                  const leaveDate = new Date(pending?.dateToLeave);
+                  return (
+                    <TableRow key={pending?._id}>
+                      <TableCell className={classes.cell} align="center">
+                        <Chip label={pending?.status} color="success" />
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.tenant?.firstName} {pending?.tenant?.lastName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {pending?.room?.roomName}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {liveDate.toDateString()}
+                      </TableCell>
+                      <TableCell className={classes.cell} align="center">
+                        {leaveDate.toDateString()}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Box>
       <ToastContainer
         position="top-right"

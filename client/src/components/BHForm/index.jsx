@@ -3,10 +3,12 @@ import {
   Box,
   Button,
   CircularProgress,
-  Container,
+  Divider,
+  FormHelperText,
   Grid,
-  InputAdornment,
+  Stack,
   TextField,
+  Typography,
   styled,
 } from '@mui/material';
 import * as Yup from 'yup';
@@ -17,6 +19,7 @@ import useRefMounted from '../../hooks/useRefMounted';
 import HomeIcon from '@mui/icons-material/Home';
 import CloudUploadTwoToneIcon from '@mui/icons-material/CloudUploadTwoTone';
 import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 
 const ButtonUploadWrapper = styled(Box)(
   ({ theme }) => `
@@ -32,8 +35,18 @@ const BHForm = ({ onClose, house }) => {
   const isMountedRef = useRefMounted();
   const fetchContext = useContext(FetchContext);
   const [selectedFile, setSelectedFile] = useState();
+  const [fileUrls, setFileUrls] = useState([]);
   const [preview, setPreview] = useState();
   const [image, setImage] = useState();
+  const [fileNames, setFileNames] = useState({
+    nbi: '',
+    accreBIR: '',
+    bp: '',
+    fireCert: '',
+    mp: '',
+    certReg: '',
+    sp: '',
+  });
 
   useEffect(() => {
     if (!selectedFile) {
@@ -80,6 +93,41 @@ const BHForm = ({ onClose, house }) => {
     setSelectedFile(e.target.files[0]);
   };
 
+  const handleFileUpload = async (event, setFieldValue, fieldName) => {
+    const file = event.target.files[0];
+
+    const formData = new FormData();
+
+    const fileType = file.type.split('/')[1];
+
+    if (['pdf', 'docx', 'jpg', 'jpeg', 'png'].includes(fileType)) {
+      formData.append('file', file);
+      formData.append('upload_preset', 'boardingHouse');
+      formData.append('folder', 'Certificates');
+
+      try {
+        const response = await axios.post(
+          `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/auto/upload`,
+          formData
+        );
+
+        setFileUrls((prevFileUrls) => [
+          ...prevFileUrls,
+          response.data.secure_url,
+        ]);
+        setFileNames((prevFileNames) => ({
+          ...prevFileNames,
+          [fieldName]: file.name,
+        }));
+        setFieldValue(fieldName, file);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log(`File type ${fileType} not accepted.`);
+    }
+  };
+
   const updateBH = async (sendData) => {
     try {
       const { data } = await fetchContext.authAxios.patch(
@@ -101,6 +149,13 @@ const BHForm = ({ onClose, house }) => {
           description: house ? house.description : '',
           landmark: house ? house.landmark : '',
           image: house ? house.image : '',
+          nbi: house ? house.nbi : null,
+          accreBIR: house ? house.accreBIR : null,
+          bp: house ? house.bp : null,
+          fireCert: house ? house.fireCert : null,
+          mp: house ? house.mp : null,
+          certReg: house ? house.certReg : null,
+          sp: house ? house.sp : null,
         }}
         validationSchema={Yup.object().shape({
           houseName: Yup.string()
@@ -112,6 +167,13 @@ const BHForm = ({ onClose, house }) => {
           description: Yup.string().required(
             'The description field is required'
           ),
+          nbi: Yup.mixed().required('Required'),
+          accreBIR: Yup.mixed().required('Required'),
+          bp: Yup.mixed().required('Required'),
+          fireCert: Yup.mixed().required('Required'),
+          mp: Yup.mixed().required('Required'),
+          certReg: Yup.mixed().required('Required'),
+          sp: Yup.mixed().required('Required'),
         })}
         onSubmit={async (
           values,
@@ -123,9 +185,28 @@ const BHForm = ({ onClose, house }) => {
             const sendData = {
               ...values,
               image,
+              nbi: fileUrls[0],
+              accreBIR: fileUrls[1],
+              bp: fileUrls[2],
+              fireCert: fileUrls[3],
+              mp: fileUrls[4],
+              certReg: fileUrls[5],
+              sp: fileUrls[6],
             };
+
             if (house) {
-              updateBH(sendData);
+              const updateData = {
+                ...values,
+                image,
+                nbi: house.nbi,
+                accreBIR: house.accreBIR,
+                bp: house.bp,
+                fireCert: house.fireCert,
+                mp: house.mp,
+                certReg: house.certReg,
+                sp: house.sp,
+              };
+              updateBH(updateData);
 
               if (isMountedRef.current) {
                 setStatus({ success: true });
@@ -175,6 +256,7 @@ const BHForm = ({ onClose, house }) => {
           isSubmitting,
           touched,
           values,
+          setFieldValue,
         }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid
@@ -299,6 +381,178 @@ const BHForm = ({ onClose, house }) => {
                 </Box>
               </Grid>
             </Grid>
+            <Box mt={10} mb={5}>
+              <Typography variant="h6" component="h2" gutterBottom mb={5}>
+                Files
+              </Typography>
+              <Stack
+                spacing={2}
+                direction="row"
+                useFlexGap
+                flexWrap="wrap"
+                justifyContent="center"
+              >
+                {!house && !house?.nbi && (
+                  <Box>
+                    <input
+                      id="nbi"
+                      type="file"
+                      name="nbi"
+                      onChange={(e) =>
+                        handleFileUpload(e, setFieldValue, 'nbi')
+                      }
+                      style={{ display: 'none' }}
+                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      required
+                    />
+                    <label htmlFor="nbi">
+                      <Button variant="contained" component="span">
+                        {fileNames.nbi || 'Upload NBI Clearance'}
+                      </Button>
+                    </label>
+                    {Boolean(touched.nbi && errors.nbi) && (
+                      <FormHelperText error>{errors.nbi}</FormHelperText>
+                    )}
+                  </Box>
+                )}
+                {!house && !house?.nbi && (
+                  <Box>
+                    <input
+                      id="accreBIR"
+                      type="file"
+                      name="accreBIR"
+                      onChange={(e) =>
+                        handleFileUpload(e, setFieldValue, 'accreBIR')
+                      }
+                      style={{ display: 'none' }}
+                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      required
+                    />
+                    <label htmlFor="accreBIR">
+                      <Button variant="contained" component="span">
+                        {fileNames.accreBIR ||
+                          'Upload License Accreditation from BIR'}
+                      </Button>
+                    </label>
+                    {Boolean(touched.accreBIR && errors.accreBIR) && (
+                      <FormHelperText error>{errors.accreBIR}</FormHelperText>
+                    )}
+                  </Box>
+                )}
+                {!house && !house?.nbi && (
+                  <Box>
+                    <input
+                      id="bp"
+                      type="file"
+                      name="bp"
+                      onChange={(e) => handleFileUpload(e, setFieldValue, 'bp')}
+                      style={{ display: 'none' }}
+                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      required
+                    />
+                    <label htmlFor="bp">
+                      <Button variant="contained" component="span">
+                        {fileNames.bp || 'Upload Business Permit'}
+                      </Button>
+                    </label>
+                    {Boolean(touched.bp && errors.bp) && (
+                      <FormHelperText error>{errors.bp}</FormHelperText>
+                    )}
+                  </Box>
+                )}
+                {!house && !house?.nbi && (
+                  <Box>
+                    <input
+                      id="fireCert"
+                      type="file"
+                      name="fireCert"
+                      onChange={(e) =>
+                        handleFileUpload(e, setFieldValue, 'fireCert')
+                      }
+                      style={{ display: 'none' }}
+                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      required
+                    />
+                    <label htmlFor="fireCert">
+                      <Button variant="contained" component="span">
+                        {fileNames.fireCert ||
+                          'Fire Safety Inspection Certificate'}
+                      </Button>
+                    </label>
+                    {Boolean(touched.fireCert && errors.fireCert) && (
+                      <FormHelperText error>{errors.fireCert}</FormHelperText>
+                    )}
+                  </Box>
+                )}
+                {!house && !house?.nbi && (
+                  <Box>
+                    <input
+                      id="mp"
+                      type="file"
+                      name="mp"
+                      onChange={(e) => handleFileUpload(e, setFieldValue, 'mp')}
+                      style={{ display: 'none' }}
+                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      required
+                    />
+                    <label htmlFor="mp">
+                      <Button variant="contained" component="span">
+                        {fileNames.mp || 'Upload Mayor’s Permit'}
+                      </Button>
+                    </label>
+                    {Boolean(touched.mp && errors.mp) && (
+                      <FormHelperText error>{errors.mp}</FormHelperText>
+                    )}
+                  </Box>
+                )}
+                {!house && !house?.nbi && (
+                  <Box>
+                    <input
+                      id="certReg"
+                      type="file"
+                      name="certReg"
+                      onChange={(e) =>
+                        handleFileUpload(e, setFieldValue, 'certReg')
+                      }
+                      style={{ display: 'none' }}
+                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      required
+                    />
+                    <label htmlFor="certReg">
+                      <Button variant="contained" component="span">
+                        {fileNames.certReg ||
+                          'Upload Certificate of Registration'}
+                      </Button>
+                    </label>
+                    {Boolean(touched.certReg && errors.certReg) && (
+                      <FormHelperText error>{errors.certReg}</FormHelperText>
+                    )}
+                  </Box>
+                )}
+                {!house && !house?.nbi && (
+                  <Box>
+                    <input
+                      id="sp"
+                      type="file"
+                      name="sp"
+                      onChange={(e) => handleFileUpload(e, setFieldValue, 'sp')}
+                      style={{ display: 'none' }}
+                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      required
+                    />
+                    <label htmlFor="sp">
+                      <Button variant="contained" component="span">
+                        {fileNames.sp || 'Upload Sanitary Permit'}
+                      </Button>
+                    </label>
+                    {Boolean(touched.sp && errors.sp) && (
+                      <FormHelperText error>{errors.sp}</FormHelperText>
+                    )}
+                  </Box>
+                )}
+              </Stack>
+            </Box>
+            <Divider />
             <Button
               sx={{
                 mt: 3,

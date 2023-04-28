@@ -8,6 +8,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
+  Alert,
+  AlertTitle,
   Avatar,
   Badge,
   Box,
@@ -90,14 +92,9 @@ const menu = [
 ];
 
 const useStyles = makeStyles((theme) => ({
-  list: {
-    minWidth: 300,
-    padding: theme.spacing(1),
-  },
+  list: {},
   listItem: {
-    padding: theme.spacing(1, 0),
     '&:hover': {
-      backgroundColor: theme.palette.grey[200],
       cursor: 'pointer',
     },
   },
@@ -346,10 +343,12 @@ const Sidebar = ({ index }) => {
                     history(`/${notif?.urlLink}`);
                   }}
                 >
-                  <ListItemText
-                    primary={`${notif?.made?.firstName} ${notif?.made?.lastName}`}
-                    secondary={notif?.description}
-                  />
+                  <Alert severity="info" fullWidth>
+                    <AlertTitle>
+                      {notif?.made?.firstName} {notif?.made?.lastName}
+                    </AlertTitle>
+                    {notif?.description}
+                  </Alert>
                 </ListItem>
               ))}
             </List>

@@ -437,7 +437,7 @@ const userCtrl = {
 
       if (expiredReservation.length > 0) {
         const updateReservation = await Reservation.updateMany(
-          { dateToLeave: { $lte: today } },
+          { dateToLeave: { $lte: today }, status: { $ne: 'canceled' } },
           { status: 'expired' },
           { new: true }
         );
@@ -469,7 +469,7 @@ const userCtrl = {
         await Room.findByIdAndUpdate(
           req.params.id,
           {
-            occupied: false,
+            available: true,
           },
           { new: true }
         );

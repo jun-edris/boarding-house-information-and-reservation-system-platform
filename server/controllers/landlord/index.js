@@ -185,7 +185,19 @@ const landlordCtrl = {
   },
   createBH: async (req, res) => {
     try {
-      const { houseName, description, image, landmark } = req.body;
+      const {
+        houseName,
+        description,
+        image,
+        landmark,
+        nbi,
+        accreBIR,
+        bp,
+        fireCert,
+        mp,
+        certReg,
+        sp,
+      } = req.body;
 
       const existingHouse = await BoardingHouse.findOne({
         houseName: houseName,
@@ -199,6 +211,13 @@ const landlordCtrl = {
         landmark,
         description,
         image,
+        nbi,
+        accreBIR,
+        bp,
+        fireCert,
+        mp,
+        certReg,
+        sp,
         owner: req.user.sub,
       };
 
@@ -253,13 +272,32 @@ const landlordCtrl = {
   },
   updateBH: async (req, res) => {
     try {
-      const { houseName, description, image, landmark } = req.body;
+      const {
+        houseName,
+        description,
+        image,
+        landmark,
+        nbi,
+        accreBIR,
+        bp,
+        fireCert,
+        mp,
+        certReg,
+        sp,
+      } = req.body;
 
       const houseData = {
         houseName,
         landmark,
         description,
         image,
+        nbi,
+        accreBIR,
+        bp,
+        fireCert,
+        mp,
+        certReg,
+        sp,
         owner: req.user.sub,
       };
 
@@ -321,7 +359,7 @@ const landlordCtrl = {
             roomId,
             {
               $push: { tenants: tenantID },
-              occupied: true,
+              available: false,
             },
             { new: true }
           );
