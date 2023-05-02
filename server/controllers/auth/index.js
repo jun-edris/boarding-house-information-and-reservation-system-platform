@@ -54,7 +54,7 @@ const authCtrl = {
       res.status(400).json({ msg: error.message });
     }
   },
-  udpateUser: async () => {
+  updateUser: async (req, res) => {
     try {
       const {
         firstName,
@@ -66,10 +66,36 @@ const authCtrl = {
         province,
         city,
         barangay,
-        password,
         role,
         image,
       } = req.body;
+
+      const updatedUser = await Users.findByIdAndUpdate(
+        req.params.id,
+        {
+          firstName,
+          middleName,
+          lastName,
+          email,
+          contact,
+          region,
+          province,
+          city,
+          barangay,
+          role,
+          image,
+        },
+        {
+          new: true,
+          select:
+            'firstName middleName lastName email contact region province city barangay role image active noBH reviewed status',
+        }
+      );
+      console.log(updatedUser);
+      res.status(200).send({
+        message: 'A user is successfully updated!',
+        updatedUser,
+      });
     } catch (error) {
       console.log(error);
       res.status(400).json({ msg: error.message });

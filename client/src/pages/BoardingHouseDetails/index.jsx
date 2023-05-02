@@ -249,29 +249,33 @@ const BoardingHouseDetails = () => {
                     </Grid>
                     <Grid item xs={12} lg={7} sx={{ height: '100%' }}>
                       <Grid container spacing={2}>
-                        {bHouse?.rooms?.map((room, index) => {
-                          return (
-                            <Grid item key={index} xs={12} md>
-                              <Card>
-                                {room?.image ? (
-                                  <CardMedia
-                                    component="img"
-                                    width="100%"
-                                    height="100%"
-                                    image={room?.image}
-                                    alt={bHouse?.houseName}
-                                  />
-                                ) : (
-                                  <Box height="100%" width="100%">
-                                    <Typography variant="body2">
-                                      No image
-                                    </Typography>
-                                  </Box>
-                                )}
-                              </Card>
-                            </Grid>
-                          );
-                        })}
+                        {bHouse?.rooms
+                          ?.filter((element, index) => {
+                            return index < 6;
+                          })
+                          .map((room, index) => {
+                            return (
+                              <Grid item key={index} xs={12} lg={4}>
+                                <Card>
+                                  {room?.image ? (
+                                    <CardMedia
+                                      component="img"
+                                      width="100%"
+                                      height="220"
+                                      image={room?.image}
+                                      alt={bHouse?.houseName}
+                                    />
+                                  ) : (
+                                    <Box height="100%" width="100%">
+                                      <Typography variant="body2">
+                                        No image
+                                      </Typography>
+                                    </Box>
+                                  )}
+                                </Card>
+                              </Grid>
+                            );
+                          })}
                       </Grid>
                     </Grid>
                   </Grid>

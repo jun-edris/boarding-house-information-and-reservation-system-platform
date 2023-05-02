@@ -24,11 +24,14 @@ const Profile = () => {
   return (
     <>
       <Container maxWidth="lg" sx={{ mt: 5 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant="contained" onClick={() => setOpen(true)}>
-            Update Details
-          </Button>
-        </Box>
+        {authContext.authState.userInfo.role !== 'admin' && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button variant="contained" onClick={() => setOpen(true)}>
+              Update Details
+            </Button>
+          </Box>
+        )}
+
         <Paper elevation={0} variant="outlined" sx={{ p: 3, mt: 3 }}>
           <Grid container spacing={2} alignItems="stretch">
             <Grid item xs={12} lg={4}>
@@ -119,7 +122,10 @@ const Profile = () => {
         open={open}
         onClose={handleModalClose}
       >
-        <RegisterForm user={authContext.authState.userInfo} />
+        <RegisterForm
+          onClose={handleModalClose}
+          user={authContext.authState.userInfo}
+        />
       </DialogContainer>
     </>
   );

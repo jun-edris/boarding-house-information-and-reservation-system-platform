@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <div>
       <Header />
-      <Box sx={{ height: '100%', backgroundColor: 'white' }}>
+      <Box sx={{ height: '100%', minHeight: '100vh' }}>
         <Outlet />
       </Box>
       <Footer />

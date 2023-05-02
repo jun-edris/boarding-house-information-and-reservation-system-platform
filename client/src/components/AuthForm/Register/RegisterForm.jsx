@@ -23,9 +23,11 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloudUploadTwoToneIcon from '@mui/icons-material/CloudUploadTwoTone';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { publicFetch } from '../../../config/fetch';
 import axios from 'axios';
+import { FetchContext } from '../../../context/FetchContext';
+import { AuthContext } from '../../../context/AuthContext';
 
 const ButtonUploadWrapper = styled(Box)(
   ({ theme }) => `
@@ -37,8 +39,11 @@ const ButtonUploadWrapper = styled(Box)(
   `
 );
 
-const RegisterForm = ({ user }) => {
+const RegisterForm = ({ onClose, user }) => {
   // const { register } = useAuth()
+  const fetchContext = useContext(FetchContext);
+  const authContext = useContext(AuthContext);
+
   const isMountedRef = useRefMounted();
   const [regionData, setRegion] = useState([]);
   const [provinceData, setProvince] = useState([]);
@@ -251,6 +256,24 @@ const RegisterForm = ({ user }) => {
     setSelectedFile(e.target.files[0]);
   };
 
+  const updateUser = async (values) => {
+    try {
+      const { data } = await fetchContext.authAxios.patch(
+        `/auth/user/${user?._id}`,
+        values
+      );
+      localStorage.setItem('userInfo', JSON.stringify(data.user));
+
+      authContext.setAuthState({
+        ...authContext.authState,
+        userInfo: data.updatedUser,
+      });
+      toast.success(data.msg);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <>
       <Formik
@@ -277,19 +300,43 @@ const RegisterForm = ({ user }) => {
           try {
             setSubmitting(true);
 
+            const {
+              firstName,
+              middleName,
+              lastName,
+              email,
+              contact,
+              password,
+              role,
+            } = values;
+
             if (user) {
-              console.log(values);
-            } else {
-              const {
+              const updateData = {
                 firstName,
                 middleName,
                 lastName,
                 email,
                 contact,
-                password,
-                role,
-              } = values;
+                image,
+                region: user?.region,
+                province: user?.province,
+                city: user?.city,
+                barangay: user?.barangay,
+                role: user?.role,
+              };
 
+              updateUser(updateData);
+
+              if (isMountedRef.current) {
+                setStatus({ success: true });
+                setSubmitting(false);
+              }
+              setPreview(null);
+              resetForm(true);
+              onClose(true);
+            }
+
+            if (!user) {
               const toSendData = {
                 firstName,
                 middleName,
@@ -487,34 +534,41 @@ const RegisterForm = ({ user }) => {
                   flexDirection="column"
                 >
                   <Box sx={{ position: 'relative' }}>
-                    <Avatar
-                      variant="rounded"
-                      sx={{ width: 150, height: 150, borderRadius: 5 }}
-                    >
-                      <>
-                        {/* {user && (
-                          <img
-                            src={user.image}
-                            alt="To upload"
-                            width="150"
-                            height="150"
-                            aspectRatio={1 / 1}
-                          />
-                        )} */}
+                    {user && preview === undefined && (
+                      <Avatar
+                        variant="rounded"
+                        sx={{ width: 150, height: 150, borderRadius: 5 }}
+                      >
+                        <img
+                          src={user?.image}
+                          alt="To upload"
+                          width="150"
+                          height="150"
+                          aspectRatio={1 / 1}
+                        />
+                      </Avatar>
+                    )}
+                    {preview && (
+                      <Avatar
+                        variant="rounded"
+                        sx={{ width: 150, height: 150, borderRadius: 5 }}
+                      >
+                        <>
+                          {preview ? (
+                            <img
+                              src={preview}
+                              alt="To upload"
+                              width="150"
+                              height="150"
+                              aspectRatio={1 / 1}
+                            />
+                          ) : (
+                            <AccountBoxIcon sx={{ width: 125, height: 125 }} />
+                          )}
+                        </>
+                      </Avatar>
+                    )}
 
-                        {preview !== undefined ? (
-                          <img
-                            src={preview}
-                            alt="To upload"
-                            width="150"
-                            height="150"
-                            aspectRatio={1 / 1}
-                          />
-                        ) : (
-                          <AccountBoxIcon sx={{ width: 125, height: 125 }} />
-                        )}
-                      </>
-                    </Avatar>
                     <ButtonUploadWrapper>
                       <input
                         style={{ display: 'none' }}
@@ -541,120 +595,123 @@ const RegisterForm = ({ user }) => {
                 </Box>
               </Grid>
             </Grid>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm>
-                <FormControl fullWidth variant="filled">
-                  <InputLabel id="region">Region</InputLabel>
-                  <Select
-                    error={Boolean(touched.region && errors.region)}
-                    labelId="region"
-                    id="region"
-                    value={values.region}
-                    label="Region"
-                    onChange={(e) => {
-                      handleChange(e);
-                      province(e);
-                    }}
-                    name="region"
-                  >
-                    {regionData &&
-                      regionData.length > 0 &&
-                      regionData?.map((item) => (
-                        <MenuItem key={item.code} value={item.code}>
-                          {item?.regionName} {item?.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-                {Boolean(touched.region && errors.region) && (
-                  <FormHelperText error>{errors.region}</FormHelperText>
-                )}
+            {!user && (
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm>
+                  <FormControl fullWidth variant="filled">
+                    <InputLabel id="region">Region</InputLabel>
+                    <Select
+                      error={Boolean(touched.region && errors.region)}
+                      labelId="region"
+                      id="region"
+                      value={values.region}
+                      label="Region"
+                      onChange={(e) => {
+                        handleChange(e);
+                        province(e);
+                      }}
+                      name="region"
+                    >
+                      {regionData &&
+                        regionData.length > 0 &&
+                        regionData?.map((item) => (
+                          <MenuItem key={item.code} value={item.code}>
+                            {item?.regionName} {item?.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                  {Boolean(touched.region && errors.region) && (
+                    <FormHelperText error>{errors.region}</FormHelperText>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm>
+                  <FormControl fullWidth variant="filled">
+                    <InputLabel id="province">Province</InputLabel>
+                    <Select
+                      error={Boolean(touched.province && errors.province)}
+                      labelId="province"
+                      id="province"
+                      value={values.province}
+                      label="Province"
+                      onChange={(e) => {
+                        handleChange(e);
+                        city(e);
+                      }}
+                      name="province"
+                    >
+                      {provinceData &&
+                        provinceData.length > 0 &&
+                        provinceData.map((item) => (
+                          <MenuItem key={item.code} value={item.code}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                  {Boolean(touched.province && errors.province) && (
+                    <FormHelperText error>{errors.province}</FormHelperText>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm>
+                  <FormControl fullWidth variant="filled">
+                    <InputLabel id="city">City</InputLabel>
+                    <Select
+                      error={Boolean(touched.city && errors.city)}
+                      labelId="city"
+                      id="city"
+                      value={values.city}
+                      label="City"
+                      onChange={(e) => {
+                        handleChange(e);
+                        barangay(e);
+                      }}
+                      name="city"
+                    >
+                      {cityData &&
+                        cityData.length > 0 &&
+                        cityData.map((item) => (
+                          <MenuItem key={item.code} value={item.code}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                  {Boolean(touched.city && errors.city) && (
+                    <FormHelperText error>{errors.city}</FormHelperText>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm>
+                  <FormControl fullWidth variant="filled">
+                    <InputLabel id="barangay">Barangay</InputLabel>
+                    <Select
+                      error={Boolean(touched.barangay && errors.barangay)}
+                      labelId="barangay"
+                      id="barangay"
+                      value={values.barangay}
+                      label="Barangay"
+                      onChange={(e) => {
+                        handleChange(e);
+                        brgy(e);
+                      }}
+                      name="barangay"
+                    >
+                      {barangayData &&
+                        barangayData.length > 0 &&
+                        barangayData.map((item) => (
+                          <MenuItem key={item.code} value={item.code}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                  {Boolean(touched.barangay && errors.barangay) && (
+                    <FormHelperText error>{errors.barangay}</FormHelperText>
+                  )}
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm>
-                <FormControl fullWidth variant="filled">
-                  <InputLabel id="province">Province</InputLabel>
-                  <Select
-                    error={Boolean(touched.province && errors.province)}
-                    labelId="province"
-                    id="province"
-                    value={values.province}
-                    label="Province"
-                    onChange={(e) => {
-                      handleChange(e);
-                      city(e);
-                    }}
-                    name="province"
-                  >
-                    {provinceData &&
-                      provinceData.length > 0 &&
-                      provinceData.map((item) => (
-                        <MenuItem key={item.code} value={item.code}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-                {Boolean(touched.province && errors.province) && (
-                  <FormHelperText error>{errors.province}</FormHelperText>
-                )}
-              </Grid>
-              <Grid item xs={12} sm>
-                <FormControl fullWidth variant="filled">
-                  <InputLabel id="city">City</InputLabel>
-                  <Select
-                    error={Boolean(touched.city && errors.city)}
-                    labelId="city"
-                    id="city"
-                    value={values.city}
-                    label="City"
-                    onChange={(e) => {
-                      handleChange(e);
-                      barangay(e);
-                    }}
-                    name="city"
-                  >
-                    {cityData &&
-                      cityData.length > 0 &&
-                      cityData.map((item) => (
-                        <MenuItem key={item.code} value={item.code}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-                {Boolean(touched.city && errors.city) && (
-                  <FormHelperText error>{errors.city}</FormHelperText>
-                )}
-              </Grid>
-              <Grid item xs={12} sm>
-                <FormControl fullWidth variant="filled">
-                  <InputLabel id="barangay">Barangay</InputLabel>
-                  <Select
-                    error={Boolean(touched.barangay && errors.barangay)}
-                    labelId="barangay"
-                    id="barangay"
-                    value={values.barangay}
-                    label="Barangay"
-                    onChange={(e) => {
-                      handleChange(e);
-                      brgy(e);
-                    }}
-                    name="barangay"
-                  >
-                    {barangayData &&
-                      barangayData.length > 0 &&
-                      barangayData.map((item) => (
-                        <MenuItem key={item.code} value={item.code}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-                {Boolean(touched.barangay && errors.barangay) && (
-                  <FormHelperText error>{errors.barangay}</FormHelperText>
-                )}
-              </Grid>
-            </Grid>
+            )}
+
             {!user && (
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} sm>

@@ -1,6 +1,9 @@
 import {
   Box,
+  Button,
+  Grid,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -14,8 +17,9 @@ import { FetchContext } from '../../../../context/FetchContext';
 
 export const BHDetails = [
   { id: 'name', label: 'House Name' },
-  { id: 'description', label: 'Description' },
   { id: 'owner', label: 'Owner' },
+  { id: 'rooms', label: 'Rooms' },
+  { id: 'requirements', label: 'Requirements' },
 ];
 
 const ApprovedHouses = () => {
@@ -61,13 +65,65 @@ const ApprovedHouses = () => {
                 return (
                   <TableRow key={index}>
                     <TableCell>{house?.houseName}</TableCell>
-                    <TableCell sx={{ overflowWrap: 'break-word' }}>
-                      <Typography component="pre">
-                        {house?.description}
-                      </Typography>
-                    </TableCell>
                     <TableCell>
                       {house?.owner.firstName} {house?.owner.lastName}
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{house?.rooms?.length}</Typography>
+                    </TableCell>
+                    <TableCell sx={{ width: 300 }}>
+                      <Grid container spacing={2} columnSpacing={3}>
+                        {house?.nbi && (
+                          <Grid item lg={12}>
+                            <Button variant="contained" fullWidth>
+                              NBI Clearance
+                            </Button>
+                          </Grid>
+                        )}
+
+                        {house?.accreBIR && (
+                          <Grid item lg={12}>
+                            <Button variant="contained" fullWidth>
+                              License Accreditation from BIR
+                            </Button>
+                          </Grid>
+                        )}
+                        {house?.bp && (
+                          <Grid item lg={12}>
+                            <Button variant="contained" fullWidth>
+                              Business Permit
+                            </Button>
+                          </Grid>
+                        )}
+                        {house?.fireCert && (
+                          <Grid item lg={12}>
+                            <Button variant="contained" fullWidth>
+                              Fire Safety Inspection Certificate
+                            </Button>
+                          </Grid>
+                        )}
+                        {house?.mp && (
+                          <Grid item lg={12}>
+                            <Button variant="contained" fullWidth>
+                              Mayor’s Permit
+                            </Button>
+                          </Grid>
+                        )}
+                        {house?.certReg && (
+                          <Grid item lg={12}>
+                            <Button variant="contained" fullWidth>
+                              Certificate of Registration
+                            </Button>
+                          </Grid>
+                        )}
+                        {house?.sp && (
+                          <Grid item lg={12}>
+                            <Button variant="contained" fullWidth>
+                              Sanitary Permit
+                            </Button>
+                          </Grid>
+                        )}
+                      </Grid>
                     </TableCell>
                   </TableRow>
                 );
