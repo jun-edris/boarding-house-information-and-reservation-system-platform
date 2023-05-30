@@ -30,6 +30,7 @@ const boardingHouseSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    decline: { type: Boolean, default: false },
     image: {
       type: String,
       default: '',

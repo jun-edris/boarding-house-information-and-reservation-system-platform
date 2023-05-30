@@ -84,6 +84,13 @@ router.post(
   requireAuthenticated,
   landlordCtrl.notifyTenant
 );
+router.post(
+  '/notify/admin',
+  attachUser,
+  checkJwt,
+  requireAuthenticated,
+  landlordCtrl.notifyAdmin
+);
 router.patch(
   '/room/:id',
   attachUser,

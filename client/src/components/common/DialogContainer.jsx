@@ -21,6 +21,7 @@ const DialogContainer = ({
   setSelectedMenu,
   setOpenPopup,
   nextPopupTitle,
+  cusWid,
 }) => {
   const [accept, setAccept] = useState(false);
 
@@ -35,7 +36,7 @@ const DialogContainer = ({
       open={open}
       onClose={onClose}
       fullWidth
-      maxWidth="lg"
+      maxWidth={cusWid ? cusWid : 'lg'}
       sx={{ borderRadius: 5 }}
     >
       <DialogTitle>{title}</DialogTitle>

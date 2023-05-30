@@ -145,7 +145,7 @@ const landlordCtrl = {
   },
   notifyTenant: async (req, res) => {
     try {
-      const { tenantId, type } = req.body;
+      const { tenantId, type, reason } = req.body;
       const user = await User.findById(tenantId).lean();
 
       const notifType =
@@ -157,6 +157,8 @@ const landlordCtrl = {
           ? 'Accepted your cancelation!'
           : type === 'declineCancelation'
           ? 'Declined your cancelation!'
+          : type === 'declineBH'
+          ? 'Declined your entry!'
           : null;
 
       if (!user)
@@ -168,6 +170,7 @@ const landlordCtrl = {
         user: user._id,
         made: req.user.sub,
         description: notifType,
+        reason,
         urlLink: '',
       };
 
@@ -177,6 +180,39 @@ const landlordCtrl = {
       pusher.trigger('notify', 'notify-tenant', newNotif);
       return res.status(201).json({
         msg: 'Notified!',
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ msg: 'Something went wrong!' });
+    }
+  },
+  notifyAdmin: async (req, res) => {
+    try {
+      const { houseId } = req.body;
+
+      const boardingHouse = await BoardingHouse.findById(houseId);
+
+      const admin = await User.findOne({ role: 'admin' });
+
+      if (!boardingHouse)
+        return res.status(400).json({
+          msg: 'BoardingHouse',
+        });
+
+      const notifData = {
+        user: admin?._id,
+        made: req.user.sub,
+        description: 'New Boarding House',
+        urlLink: 'boardingHouse/pending',
+      };
+
+      const newNotif = new Notification(notifData);
+      await newNotif.save();
+
+      pusher.trigger('notify', 'notify-landlord', newNotif);
+      return res.status(201).json({
+        msg: 'Notified!',
+        notif: newNotif,
       });
     } catch (error) {
       console.log(error);
@@ -224,8 +260,10 @@ const landlordCtrl = {
       const newHouse = new BoardingHouse(houseData);
 
       await newHouse.save();
+      pusher.trigger('notify', 'notify-admin', houseData);
       res.status(201).json({
         msg: 'Boarding House created',
+        houseId: newHouse._id,
       });
     } catch (error) {
       console.log(error);
@@ -439,7 +477,7 @@ const landlordCtrl = {
           { new: true }
         );
       }
-
+      pusher.trigger('notify', 'notify-tenant', reserved);
       return res.status(200).json({
         msg: 'Reservation rejected!',
       });
@@ -471,6 +509,7 @@ const landlordCtrl = {
         { new: true }
       );
 
+      pusher.trigger('notify', 'notify-tenant', reserved);
       return res.status(200).json({
         msg: 'Declined Cancelation!',
       });
@@ -608,31 +647,28 @@ const landlordCtrl = {
   },
   deleteNotifLandlord: async (req, res) => {
     try {
-      const tenant = await User.findById(req.params.id);
+      console.log(req.user.sub);
+      console.log(req.params.id);
+      const user = await User.findById(req.user.sub);
 
-      const landlord = await User.findById(req.user.sub);
+      if (!user) return res.status(400).json({ msg: 'User not found!' });
 
-      if (!tenant) return res.status(400).json({ msg: 'Tenant not found!' });
-      if (!landlord)
-        return res.status(400).json({ msg: 'Landlord not found!' });
+      // const notif = await Notification.findOne({
+      //   _id: req.params.id,
+      // });
 
-      const notif = await Notification.findOne({
-        user: req.user.sub,
-        made: tenant._id,
+      // if (!notif) res.status(400).json({ msg: 'Cannot find Notification!' });
+
+      await Notification.findOneAndDelete({
+        _id: req.params.id,
       });
 
-      if (!notif) res.status(400).json({ msg: 'Cannot find Notification!' });
-
-      const notifDeleted = await Notification.findOneAndDelete({
-        user: req.user.sub,
-        made: tenant._id,
-      });
-
-      if (!notifDeleted)
-        res.status(400).json({ msg: 'Cannot find Notification!' });
-
-      pusher.trigger('notify', 'notify-landlord', landlord);
-      return res.status(200).json({ msg: 'deleted' });
+      // if (!notifDeleted) {
+      //   res.status(400).json({ msg: 'Cannot find Notification!' });
+      // } else {
+      pusher.trigger('notify', 'notify-tenant', user);
+      return res.status(200).json({});
+      // }
     } catch (error) {
       console.log(error);
       res.status(400).json({ msg: error.message });

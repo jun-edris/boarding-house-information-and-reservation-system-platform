@@ -18,21 +18,21 @@ const Home = () => {
       });
   };
 
-  const expiredReservation = async () => {
-    fetchContext.authAxios
-      .patch(`/reservation/expire`)
-      .then(({ data }) => {
-        console.log(data.msg);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const expiredReservation = async () => {
+  //   fetchContext.authAxios
+  //     .patch(`/reservation/expire`)
+  //     .then(({ data }) => {
+  //       console.log(data.msg);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   useEffect(() => {
     const controller = new AbortController();
 
-    expiredReservation();
+    // expiredReservation();
     getApprovedBH();
 
     return () => controller.abort();
@@ -42,10 +42,11 @@ const Home = () => {
     <>
       <Box
         sx={{
-          background: `url(/home.jpg)`,
+          background: `url(/logo.png)`,
           height: 500,
-          backgroundSize: 'cover',
+          backgroundSize: 'contain',
           backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
@@ -68,7 +69,7 @@ const Home = () => {
           color="white"
           sx={{ zIndex: 1 }}
         >
-          Welcome to Boarding House System
+          Welcome to Boarding House Information Reservation System
         </Typography>
       </Box>
       <Container

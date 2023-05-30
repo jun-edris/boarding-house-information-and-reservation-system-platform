@@ -153,6 +153,15 @@ const Sidebar = ({ index }) => {
       });
   };
 
+  const deleteNotifLandlord = async (id) => {
+    try {
+      await fetchContext.authAxios.delete(`/notify/delete/landlord/${id}`);
+      getNotif();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const controller = new AbortController();
     const notifChannel = authContext.pusher.subscribe('notify');
@@ -340,7 +349,10 @@ const Sidebar = ({ index }) => {
                   className={classes.listItem}
                   key={notif?._id}
                   onClick={() => {
-                    history(`/${notif?.urlLink}`);
+                    deleteNotifLandlord(notif?._id);
+                    if (notif?.urlLink !== '') {
+                      history(`/${notif?.urlLink}`);
+                    }
                   }}
                 >
                   <Alert severity="info" fullWidth>
@@ -362,24 +374,29 @@ const Sidebar = ({ index }) => {
         </Popover>
 
         {open && (
-          <Box sx={{ mt: 1.5 }}>
+          <Box sx={{ mt: 1.5, display: 'flex', flexDirection: 'column' }}>
             <Typography
               variant="h6"
               component="span"
               sx={{ textTransform: 'capitalize', textAlign: 'center' }}
             >
-              {authContext.authState.userInfo
-                ? `${authContext.authState.userInfo.firstName} ${authContext.authState.userInfo.lastName}`
-                : ''}
+              {authContext.authState.userInfo.role !== 'admin'
+                ? authContext.authState.userInfo.firstName
+                : null}{' '}
+              {authContext.authState.userInfo.role !== 'admin'
+                ? authContext.authState.userInfo.lastName
+                : null}
             </Typography>
             <Typography
               variant="overline"
               component="span"
-              sx={{ display: 'block', textAlign: 'center' }}
+              sx={{ display: 'block', textAlign: 'center', mt: 1 }}
             >
-              {authContext.authState.userInfo
-                ? `${authContext.authState.userInfo.role}`
-                : ''}
+              {authContext.authState.userInfo.role === 'tenant'
+                ? 'Boarder'
+                : authContext.authState.userInfo.role === 'landlord'
+                ? 'Boarding House Owner'
+                : authContext.authState.userInfo.role}
             </Typography>
           </Box>
         )}

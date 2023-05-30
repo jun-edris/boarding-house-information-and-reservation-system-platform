@@ -47,7 +47,7 @@ const LoginForm = () => {
         validationSchema={Yup.object().shape({
           account: Yup.string()
             .max(255)
-            .required('The email  field is required'),
+            .required('The email/phone number field is required'),
           password: Yup.string()
             .max(255)
             .required('The password field is required'),
@@ -60,6 +60,8 @@ const LoginForm = () => {
               setStatus({ success: true });
               setSubmitting(false);
             }
+            authContext.setShowModalLater(false);
+            localStorage.setItem('showModalLater', JSON.stringify(false));
             toast.success('Login successfully!');
             if (!authContext.isAuthenticated()) {
               return history('/', { replace: true });

@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema(
       min: 10,
       max: 10,
     },
+    parent: {
+      type: String,
+    },
     region: {
       type: String,
       required: [true, 'Please provide an address'],

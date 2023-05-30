@@ -94,6 +94,18 @@ const BoardingHouse = () => {
     const controller = new AbortController();
     getUserHouse();
 
+    const notifChannel = authContext.pusher.subscribe('notify');
+    notifChannel.bind('notify-landlord-deleted-BH', (res) => {
+      getUserHouse();
+
+      // setRecords(
+      // 	records.map((request) =>
+      // 		request._id === updateReq._id ? { ...records, updateReq } : request
+      // 	)
+      // );
+      fetchContext.setRefreshKey((fetchContext.refreshKey = +1));
+    });
+
     return () => controller.abort();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,12 +166,23 @@ const BoardingHouse = () => {
       {boardingHouse ? (
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12} lg={3}>
-            <Paper variant="outlined" sx={{ py: 4, px: 2, height: '100%' }}>
-              <img
+            <Paper
+              variant="outlined"
+              sx={{
+                py: 4,
+                px: 2,
+                height: '100%',
+                background: `url(${boardingHouse?.image})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              {/* <img
                 src={boardingHouse?.image}
                 alt={boardingHouse?.houseName}
                 width="100%"
-              />
+              /> */}
             </Paper>
           </Grid>
           <Grid item xs={12} lg={9}>
@@ -209,7 +232,7 @@ const BoardingHouse = () => {
                 <Grid container spacing={2} mt={1} alignItems="stretch">
                   {boardingHouse?.rooms?.map((room, index) => {
                     return (
-                      <Grid item xs={12} md={3} lg={3} key={index}>
+                      <Grid item xs={12} md={6} lg={3} key={index}>
                         <Card
                           sx={{
                             height: '100%',

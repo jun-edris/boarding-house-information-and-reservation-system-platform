@@ -51,22 +51,23 @@ const Footer = () => {
           </Grid>
           <Grid item xs={12} md={9}>
             <Typography variant="body2" className={classes.footerText}>
-              © 2023 Boarding House System. All rights reserved. This
-              boardinghouse system and its content are protected by copyright
-              law. Any unauthorized reproduction or distribution of this system,
-              or any portion of it, may result in severe civil and criminal
-              penalties, and will be prosecuted to the maximum extent possible
-              under the law. This system may not be reproduced, duplicated,
-              copied, sold, resold, or otherwise exploited for any commercial
-              purpose without the express written consent of the owner.
-              Unauthorized use of this system may also violate applicable
-              intellectual property laws, including copyright and trademark
-              laws. All trademarks, service marks, trade names, logos, and other
-              identifying marks appearing in this system are the property of
-              their respective owners. By using this system, you acknowledge and
-              agree to abide by all copyright notices and other legal notices
-              contained in this system. If you have any questions or concerns
-              about the use of this system, please contact +6398766752131.
+              © 2023 Welcome to Boarding House Information Reservation System.
+              All rights reserved. This boardinghouse system and its content are
+              protected by copyright law. Any unauthorized reproduction or
+              distribution of this system, or any portion of it, may result in
+              severe civil and criminal penalties, and will be prosecuted to the
+              maximum extent possible under the law. This system may not be
+              reproduced, duplicated, copied, sold, resold, or otherwise
+              exploited for any commercial purpose without the express written
+              consent of the owner. Unauthorized use of this system may also
+              violate applicable intellectual property laws, including copyright
+              and trademark laws. All trademarks, service marks, trade names,
+              logos, and other identifying marks appearing in this system are
+              the property of their respective owners. By using this system, you
+              acknowledge and agree to abide by all copyright notices and other
+              legal notices contained in this system. If you have any questions
+              or concerns about the use of this system, please contact
+              +6398766752131.
             </Typography>
           </Grid>
         </Grid>

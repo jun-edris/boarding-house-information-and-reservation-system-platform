@@ -103,6 +103,15 @@ const Header = () => {
       });
   };
 
+  const deleteNotifLandlord = async (id) => {
+    try {
+      await fetchContext.authAxios.delete(`/notify/delete/landlord/${id}`);
+      getNotif();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const controller = new AbortController();
     const notifChannel = authContext.pusher.subscribe('notify');
@@ -310,11 +319,16 @@ const Header = () => {
                     <MenuItem
                       key={notif?._id}
                       onClick={() => {
-                        history(`/${notif?.urlLink}`);
+                        deleteNotifLandlord(notif?._id);
                       }}
                     >
                       <Alert severity="info">
                         <AlertTitle>{notif?.description}</AlertTitle>
+                        {notif?.reason !== '' && (
+                          <Typography variant="body2">
+                            {notif?.reason}
+                          </Typography>
+                        )}
                       </Alert>
                     </MenuItem>
                   ))

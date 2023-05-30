@@ -77,7 +77,11 @@ const Profile = () => {
                       variant="button"
                       sx={{ textTransform: 'capitalize' }}
                     >
-                      {authContext.authState.userInfo.role}
+                      {authContext.authState.userInfo.role === 'tenant'
+                        ? 'Boarder'
+                        : authContext.authState.userInfo.role === 'landlord'
+                        ? 'Boarding House Owner'
+                        : authContext.authState.userInfo.role}
                     </Typography>
                   </Box>
 
@@ -103,6 +107,12 @@ const Profile = () => {
                   <>
                     <Typography variant="body1" sx={{ mt: 1 }}>
                       Contact Number: 0{authContext.authState.userInfo.contact}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      Parent:{' '}
+                      {authContext.authState.userInfo.parent
+                        ? authContext.authState.userInfo.parent
+                        : 'N/A'}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
                       Address: {authContext.authState.userInfo.barangay},{' '}

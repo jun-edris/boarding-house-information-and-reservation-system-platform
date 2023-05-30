@@ -35,10 +35,9 @@ const StarRatingInput = ({ field, form }) => {
   );
 };
 
-const ReviewModal = ({ room, boardingHouse }) => {
+const ReviewModal = ({ room, boardingHouse, open, closeModal }) => {
   const isMountedRef = useRefMounted();
   const authContext = useContext(AuthContext);
-  const [showModal, setShowModal] = useState(false);
   const fetchContext = useContext(FetchContext);
 
   const review = async (values) => {
@@ -72,26 +71,13 @@ const ReviewModal = ({ room, boardingHouse }) => {
     }
   };
 
-  useEffect(() => {
-    if (
-      authContext.authState.userInfo.reviewed === false &&
-      room !== undefined
-    ) {
-      setShowModal(true);
-    }
-  }, [room]);
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
   if (!room) {
     return <div>Loading...</div>;
   }
 
   return (
     <>
-      <Dialog open={showModal} onClose={closeModal} maxWidth="lg" fullWidth>
+      <Dialog open={open} onClose={closeModal} maxWidth="md" fullWidth>
         <DialogContent>
           <Typography variant="h5">Leave us a review!</Typography>
           <Typography variant="body2" sx={{ marginTop: 1 }}>
@@ -127,7 +113,7 @@ const ReviewModal = ({ room, boardingHouse }) => {
                     fetchContext.setRefreshKey(fetchContext.refreshKey + 1);
                     resetForm(true);
                   }, 900);
-                  setShowModal(false);
+                  closeModal();
                 } catch (error) {
                   console.log(error);
                 }
@@ -163,21 +149,25 @@ const ReviewModal = ({ room, boardingHouse }) => {
                       multiline
                       minRows={10}
                     />
-                    <Button
+                    <Box
                       sx={{
                         mt: 3,
                       }}
-                      color="primary"
-                      startIcon={
-                        isSubmitting ? <CircularProgress size="1rem" /> : null
-                      }
-                      disabled={isSubmitting}
-                      type="submit"
-                      size="large"
-                      variant="contained"
                     >
-                      Submit
-                    </Button>
+                      <Button onClick={closeModal}>Cancel</Button>
+                      <Button
+                        color="primary"
+                        startIcon={
+                          isSubmitting ? <CircularProgress size="1rem" /> : null
+                        }
+                        disabled={isSubmitting}
+                        type="submit"
+                        size="large"
+                        variant="contained"
+                      >
+                        Submit
+                      </Button>
+                    </Box>
                   </form>
                 );
               }}

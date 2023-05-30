@@ -7,10 +7,12 @@ import {
   Container,
   styled,
   Grid,
+  Divider,
 } from '@mui/material';
 import Logo from '../../../components/Logo/Logo';
 import LoginForm from '../../../components/AuthForm/Login/LoginForm';
 import { useEffect, useState } from 'react';
+import ForgotPassword from '../../../components/ForgotPassword';
 
 const MainContent = styled(Box)(
   () => `
@@ -22,6 +24,11 @@ const MainContent = styled(Box)(
 
 const Login = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
+
+  const handleModalClose = () => {
+    setOpenPopup(false);
+  };
 
   useEffect(() => {
     function handleResize() {
@@ -91,24 +98,40 @@ const Login = () => {
                   </Typography>
                 </Box>
                 <LoginForm />
-                <Box my={4}>
-                  <Typography
-                    component="span"
-                    variant="subtitle2"
-                    color="text.primary"
-                    fontWeight="bold"
-                  >
-                    Don’t have an account, yet?
-                  </Typography>{' '}
-                  <Link component={RouterLink} to="/register">
-                    <b>Sign up here</b>
-                  </Link>
+                <Box>
+                  <Box mb={2} mt={2}>
+                    <Typography
+                      onClick={() => {
+                        setOpenPopup(true);
+                      }}
+                      align="center"
+                      color="primary"
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      <b>Forget Password?</b>
+                    </Typography>
+                  </Box>
+                  <Divider />
+                  <Box mt={2}>
+                    <Typography
+                      component="span"
+                      variant="subtitle2"
+                      color="text.primary"
+                      fontWeight="bold"
+                    >
+                      Don’t have an account, yet?
+                    </Typography>{' '}
+                    <Link component={RouterLink} to="/register">
+                      <b>Sign up here</b>
+                    </Link>
+                  </Box>
                 </Box>
               </Card>
             </Grid>
           </Grid>
         </Container>
       </MainContent>
+      <ForgotPassword open={openPopup} closeModal={handleModalClose} />
     </>
   );
 };

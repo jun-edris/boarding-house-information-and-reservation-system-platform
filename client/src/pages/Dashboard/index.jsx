@@ -46,16 +46,16 @@ const Dashboard = () => {
       });
   };
 
-  const expiredReservation = async () => {
-    fetchContext.authAxios
-      .patch(`/reservation/expire`)
-      .then(({ data }) => {
-        console.log(data.msg);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const expiredReservation = async () => {
+  //   fetchContext.authAxios
+  //     .patch(`/reservation/expire`)
+  //     .then(({ data }) => {
+  //       console.log(data.msg);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const getLandlordCount = () => {
     fetchContext.authAxios
@@ -169,7 +169,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    expiredReservation();
+    // expiredReservation();
     getNotif();
 
     if (authContext.authState.userInfo.role === 'admin') {
@@ -227,7 +227,7 @@ const Dashboard = () => {
           <Avatar
             alt={
               authContext.authState.userInfo
-                ? `${authContext.authState.userInfo.firstName} ${authContext.authState.userInfo.lastName}`
+                ? `${authContext.authState.userInfo.firstName}`
                 : ''
             }
             src={
@@ -244,10 +244,15 @@ const Dashboard = () => {
           <Box>
             <Typography variant="h5" sx={{ textTransform: 'capitalize' }}>
               Welcome, {authContext.authState.userInfo.firstName}{' '}
-              {authContext.authState.userInfo.lastName}
+              {authContext.authState.userInfo.role !== 'admin' &&
+                authContext.authState.userInfo.lastName}
             </Typography>
             <Typography variant="body2" sx={{ textTransform: 'capitalize' }}>
-              {authContext.authState.userInfo.role}
+              {authContext.authState.userInfo.role === 'tenant'
+                ? 'Boarder'
+                : authContext.authState.userInfo.role === 'landlord'
+                ? 'Boarding House Owner'
+                : authContext.authState.userInfo.role === 'admin' && null}
             </Typography>
           </Box>
         </Paper>
@@ -260,7 +265,7 @@ const Dashboard = () => {
                   <Typography variant="h5" color="white">
                     Users
                   </Typography>
-                  <Grid container spacing={2} sx={{ mt: 0.5 }}>
+                  <Grid container spacing={2} sx={{ mt: 0.5, height: '100%' }}>
                     <Grid item xs={12} xl>
                       <DisplayCount
                         colorBG="secondary.main"
@@ -320,31 +325,31 @@ const Dashboard = () => {
           <>
             <Box sx={{ mt: 5 }}>
               <Typography variant="h5" color="white">
-                Tenants
+                Boarders
               </Typography>
               <Grid container spacing={2}>
-                <Grid item xs={12} lg={12}>
+                <Grid item xs={12}>
                   <Grid container spacing={2} sx={{ mt: 0.5 }}>
-                    <Grid item xs={12} xl>
+                    <Grid item xs={12} lg xl>
                       <DisplayCount
                         colorBG="primary.main"
-                        title="Living"
+                        title="On Rent"
                         count={roomTenants.length}
                         icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
-                    <Grid item xs={12} xl>
+                    <Grid item xs={12} lg xl>
                       <DisplayCount
                         colorBG="secondary.main"
-                        title="Requested To Live"
+                        title="Reservation Request to Stay"
                         count={roomTenantsToLive.length}
                         icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
                     </Grid>
-                    <Grid item xs={12} xl>
+                    <Grid item xs={12} lg xl>
                       <DisplayCount
                         colorBG="primary.dark"
-                        title="Requested To Leave"
+                        title="Request To End Reservation"
                         count={roomTenantsToLeave.length}
                         icon={<PeopleIcon sx={{ fontSize: 52 }} />}
                       />
@@ -359,10 +364,10 @@ const Dashboard = () => {
                   <ReservedChart data={roomTenants} />
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                  <PendingChart data={pendingRToAccept} type="Live" />
+                  <PendingChart data={pendingRToAccept} type="Stay" />
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                  <PendingChart data={pendingRToCancel} type="Leave" />
+                  <PendingChart data={pendingRToCancel} type="End Stay" />
                 </Grid>
               </Grid>
             </Box>

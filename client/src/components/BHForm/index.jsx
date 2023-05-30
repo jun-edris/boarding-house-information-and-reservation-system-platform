@@ -48,6 +48,22 @@ const BHForm = ({ onClose, house }) => {
     sp: '',
   });
 
+  const notifyAdmin = async (houseId) => {
+    try {
+      const values = { houseId };
+      const { data } = await fetchContext.authAxios.post(
+        `/notify/admin`,
+        values
+      );
+
+      if (data) {
+        toast.success(data.msg);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -198,13 +214,13 @@ const BHForm = ({ onClose, house }) => {
               const updateData = {
                 ...values,
                 image,
-                nbi: house.nbi,
-                accreBIR: house.accreBIR,
-                bp: house.bp,
-                fireCert: house.fireCert,
-                mp: house.mp,
-                certReg: house.certReg,
-                sp: house.sp,
+                nbi: fileUrls[0] ? fileUrls[0] : house.nbi,
+                accreBIR: fileUrls[1] ? fileUrls[1] : house.accreBIR,
+                bp: fileUrls[2] ? fileUrls[2] : house.bp,
+                fireCert: fileUrls[3] ? fileUrls[3] : house.fireCert,
+                mp: fileUrls[4] ? fileUrls[4] : house.mp,
+                certReg: fileUrls[5] ? fileUrls[5] : house.certReg,
+                sp: fileUrls[6] ? fileUrls[6] : house.sp,
               };
               updateBH(updateData);
 
@@ -225,6 +241,11 @@ const BHForm = ({ onClose, house }) => {
                 `/boardinghouse`,
                 sendData
               );
+
+              if (data) {
+                await notifyAdmin(data?.houseId);
+              }
+
               if (isMountedRef.current) {
                 setStatus({ success: true });
                 setSubmitting(false);
@@ -287,7 +308,7 @@ const BHForm = ({ onClose, house }) => {
                       fullWidth
                       margin="dense"
                       helperText={touched.landmark && errors.landmark}
-                      label={'Landmark'}
+                      label="Address"
                       name="landmark"
                       onBlur={handleBlur}
                       onChange={handleChange}
@@ -385,171 +406,186 @@ const BHForm = ({ onClose, house }) => {
               <Typography variant="h6" component="h2" gutterBottom mb={5}>
                 Files
               </Typography>
-              <Stack
-                spacing={2}
-                direction="row"
-                useFlexGap
-                flexWrap="wrap"
-                justifyContent="center"
-              >
-                {!house && !house?.nbi && (
-                  <Box>
-                    <input
-                      id="nbi"
-                      type="file"
-                      name="nbi"
-                      onChange={(e) =>
-                        handleFileUpload(e, setFieldValue, 'nbi')
-                      }
-                      style={{ display: 'none' }}
-                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      required
-                    />
-                    <label htmlFor="nbi">
-                      <Button variant="contained" component="span">
-                        {fileNames.nbi || 'Upload NBI Clearance'}
-                      </Button>
-                    </label>
-                    {Boolean(touched.nbi && errors.nbi) && (
-                      <FormHelperText error>{errors.nbi}</FormHelperText>
-                    )}
-                  </Box>
-                )}
-                {!house && !house?.nbi && (
-                  <Box>
-                    <input
-                      id="accreBIR"
-                      type="file"
-                      name="accreBIR"
-                      onChange={(e) =>
-                        handleFileUpload(e, setFieldValue, 'accreBIR')
-                      }
-                      style={{ display: 'none' }}
-                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      required
-                    />
-                    <label htmlFor="accreBIR">
-                      <Button variant="contained" component="span">
-                        {fileNames.accreBIR ||
-                          'Upload License Accreditation from BIR'}
-                      </Button>
-                    </label>
-                    {Boolean(touched.accreBIR && errors.accreBIR) && (
-                      <FormHelperText error>{errors.accreBIR}</FormHelperText>
-                    )}
-                  </Box>
-                )}
-                {!house && !house?.nbi && (
-                  <Box>
-                    <input
-                      id="bp"
-                      type="file"
-                      name="bp"
-                      onChange={(e) => handleFileUpload(e, setFieldValue, 'bp')}
-                      style={{ display: 'none' }}
-                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      required
-                    />
-                    <label htmlFor="bp">
-                      <Button variant="contained" component="span">
-                        {fileNames.bp || 'Upload Business Permit'}
-                      </Button>
-                    </label>
-                    {Boolean(touched.bp && errors.bp) && (
-                      <FormHelperText error>{errors.bp}</FormHelperText>
-                    )}
-                  </Box>
-                )}
-                {!house && !house?.nbi && (
-                  <Box>
-                    <input
-                      id="fireCert"
-                      type="file"
-                      name="fireCert"
-                      onChange={(e) =>
-                        handleFileUpload(e, setFieldValue, 'fireCert')
-                      }
-                      style={{ display: 'none' }}
-                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      required
-                    />
-                    <label htmlFor="fireCert">
-                      <Button variant="contained" component="span">
-                        {fileNames.fireCert ||
-                          'Fire Safety Inspection Certificate'}
-                      </Button>
-                    </label>
-                    {Boolean(touched.fireCert && errors.fireCert) && (
-                      <FormHelperText error>{errors.fireCert}</FormHelperText>
-                    )}
-                  </Box>
-                )}
-                {!house && !house?.nbi && (
-                  <Box>
-                    <input
-                      id="mp"
-                      type="file"
-                      name="mp"
-                      onChange={(e) => handleFileUpload(e, setFieldValue, 'mp')}
-                      style={{ display: 'none' }}
-                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      required
-                    />
-                    <label htmlFor="mp">
-                      <Button variant="contained" component="span">
-                        {fileNames.mp || 'Upload Mayor’s Permit'}
-                      </Button>
-                    </label>
-                    {Boolean(touched.mp && errors.mp) && (
-                      <FormHelperText error>{errors.mp}</FormHelperText>
-                    )}
-                  </Box>
-                )}
-                {!house && !house?.nbi && (
-                  <Box>
-                    <input
-                      id="certReg"
-                      type="file"
-                      name="certReg"
-                      onChange={(e) =>
-                        handleFileUpload(e, setFieldValue, 'certReg')
-                      }
-                      style={{ display: 'none' }}
-                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      required
-                    />
-                    <label htmlFor="certReg">
-                      <Button variant="contained" component="span">
-                        {fileNames.certReg ||
-                          'Upload Certificate of Registration'}
-                      </Button>
-                    </label>
-                    {Boolean(touched.certReg && errors.certReg) && (
-                      <FormHelperText error>{errors.certReg}</FormHelperText>
-                    )}
-                  </Box>
-                )}
-                {!house && !house?.nbi && (
-                  <Box>
-                    <input
-                      id="sp"
-                      type="file"
-                      name="sp"
-                      onChange={(e) => handleFileUpload(e, setFieldValue, 'sp')}
-                      style={{ display: 'none' }}
-                      accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      required
-                    />
-                    <label htmlFor="sp">
-                      <Button variant="contained" component="span">
-                        {fileNames.sp || 'Upload Sanitary Permit'}
-                      </Button>
-                    </label>
-                    {Boolean(touched.sp && errors.sp) && (
-                      <FormHelperText error>{errors.sp}</FormHelperText>
-                    )}
-                  </Box>
-                )}
+              <Stack spacing={2} direction="column" useFlexGap flexWrap="wrap">
+                <Box>
+                  <input
+                    id="nbi"
+                    type="file"
+                    name="nbi"
+                    onChange={(e) => handleFileUpload(e, setFieldValue, 'nbi')}
+                    style={{ display: 'none' }}
+                    accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                  />
+                  <label htmlFor="nbi">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color={fileNames.nbi ? 'success' : 'primary'}
+                    >
+                      {fileNames.nbi ? 'Uploaded' : 'Upload NBI Clearance'}
+                    </Button>
+                  </label>
+                  {Boolean(touched.nbi && errors.nbi) && (
+                    <FormHelperText error>{errors.nbi}</FormHelperText>
+                  )}
+                </Box>
+
+                <Box>
+                  <input
+                    id="accreBIR"
+                    type="file"
+                    name="accreBIR"
+                    onChange={(e) =>
+                      handleFileUpload(e, setFieldValue, 'accreBIR')
+                    }
+                    style={{ display: 'none' }}
+                    accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                  />
+                  <label htmlFor="accreBIR">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color={fileNames.accreBIR ? 'success' : 'primary'}
+                    >
+                      {fileNames.accreBIR
+                        ? 'Uploaded'
+                        : 'Upload License Accreditation from BIR'}
+                    </Button>
+                  </label>
+                  {Boolean(touched.accreBIR && errors.accreBIR) && (
+                    <FormHelperText error>{errors.accreBIR}</FormHelperText>
+                  )}
+                </Box>
+
+                <Box>
+                  <input
+                    id="bp"
+                    type="file"
+                    name="bp"
+                    onChange={(e) => handleFileUpload(e, setFieldValue, 'bp')}
+                    style={{ display: 'none' }}
+                    accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                  />
+                  <label htmlFor="bp">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color={fileNames.bp ? 'success' : 'primary'}
+                    >
+                      {fileNames.bp ? 'Uploaded' : 'Upload Business Permit'}
+                    </Button>
+                  </label>
+                  {Boolean(touched.bp && errors.bp) && (
+                    <FormHelperText error>{errors.bp}</FormHelperText>
+                  )}
+                </Box>
+
+                <Box>
+                  <input
+                    id="fireCert"
+                    type="file"
+                    name="fireCert"
+                    onChange={(e) =>
+                      handleFileUpload(e, setFieldValue, 'fireCert')
+                    }
+                    style={{ display: 'none' }}
+                    accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                  />
+                  <label htmlFor="fireCert">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color={fileNames.fireCert ? 'success' : 'primary'}
+                    >
+                      {fileNames.fireCert
+                        ? 'Uploaded'
+                        : 'Fire Safety Inspection Certificate'}
+                    </Button>
+                  </label>
+                  {Boolean(touched.fireCert && errors.fireCert) && (
+                    <FormHelperText error>{errors.fireCert}</FormHelperText>
+                  )}
+                </Box>
+
+                <Box>
+                  <input
+                    id="mp"
+                    type="file"
+                    name="mp"
+                    onChange={(e) => handleFileUpload(e, setFieldValue, 'mp')}
+                    style={{ display: 'none' }}
+                    accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                  />
+                  <label htmlFor="mp">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color={fileNames.mp ? 'success' : 'primary'}
+                    >
+                      {fileNames.mp ? 'Uploaded' : 'Upload Mayor’s Permit'}
+                    </Button>
+                  </label>
+                  {Boolean(touched.mp && errors.mp) && (
+                    <FormHelperText error>{errors.mp}</FormHelperText>
+                  )}
+                </Box>
+
+                <Box>
+                  <input
+                    id="certReg"
+                    type="file"
+                    name="certReg"
+                    onChange={(e) =>
+                      handleFileUpload(e, setFieldValue, 'certReg')
+                    }
+                    style={{ display: 'none' }}
+                    accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                  />
+                  <label htmlFor="certReg">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color={fileNames.certReg ? 'success' : 'primary'}
+                    >
+                      {fileNames.certReg
+                        ? 'Uploaded'
+                        : 'Upload Certificate of Registration'}
+                    </Button>
+                  </label>
+                  {Boolean(touched.certReg && errors.certReg) && (
+                    <FormHelperText error>{errors.certReg}</FormHelperText>
+                  )}
+                </Box>
+
+                <Box>
+                  <input
+                    id="sp"
+                    type="file"
+                    name="sp"
+                    onChange={(e) => handleFileUpload(e, setFieldValue, 'sp')}
+                    style={{ display: 'none' }}
+                    accept=".pdf,.docx,.jpg,.jpeg,.png, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    required
+                  />
+                  <label htmlFor="sp">
+                    <Button
+                      variant="contained"
+                      component="span"
+                      color={fileNames.sp ? 'success' : 'primary'}
+                    >
+                      {fileNames.sp ? 'Uploaded' : 'Upload Sanitary Permit'}
+                    </Button>
+                  </label>
+                  {Boolean(touched.sp && errors.sp) && (
+                    <FormHelperText error>{errors.sp}</FormHelperText>
+                  )}
+                </Box>
               </Stack>
             </Box>
             <Divider />

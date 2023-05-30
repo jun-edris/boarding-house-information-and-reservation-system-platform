@@ -20,6 +20,7 @@ import ReviewModal from '../../components/Review/ReviewModal';
 import ReactStars from 'react-stars';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Review from '../../components/Review/Review';
 
 const RoomLiving = () => {
   const authContext = useContext(AuthContext);
@@ -27,9 +28,15 @@ const RoomLiving = () => {
   const [room, setRoom] = useState({});
   const [reviews, setReviews] = useState([]);
   const [owner, setOwner] = useState({});
+  const [reviewModal, setReviewModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [reservation, setReservation] = useState({});
   const [dateToLeave, setDateToLeave] = useState(new Date());
   const history = useNavigate();
+
+  const closeModal = () => {
+    setReviewModal(false);
+  };
 
   const getTenantRoom = async () => {
     fetchContext.authAxios
@@ -116,15 +123,34 @@ const RoomLiving = () => {
     return () => controller.abort();
   }, [fetchContext.refreshKey]);
 
+  useEffect(() => {
+    const storedState = localStorage.getItem('showModalLater');
+    if (
+      authContext.authState.userInfo.reviewed === false &&
+      !authContext.showModalLater
+    ) {
+      setShowModal(true);
+    }
+
+    if (
+      authContext.authState.userInfo.reviewed === false &&
+      authContext.showModalLater &&
+      storedState
+    ) {
+      setShowModal(false);
+    }
+  }, []);
+
   return (
     <div>
       <Box>
         <Box
           sx={{
-            background: `url(/home.jpg)`,
+            background: `url(/logo.jpg)`,
             height: 500,
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
@@ -180,11 +206,10 @@ const RoomLiving = () => {
                   notifyLandlordToLeave(room?._id);
                 }}
               >
-                {authContext.authState.userInfo.status === 'living'
-                  ? 'Request To Cancel Reservation'
-                  : authContext.authState.userInfo.status === 'requestedToLeave'
-                  ? 'Requested To Leave'
-                  : null}
+                {authContext.authState.userInfo.status === 'living' &&
+                  'Request To Cancel Reservation'}
+                {authContext.authState.userInfo.status === 'requestedToLeave' &&
+                  'Requested To Leave'}
               </Button>
             </Box>
             <Grid container spacing={2} sx={{ marginBottom: 4 }}>
@@ -366,7 +391,17 @@ const RoomLiving = () => {
           </Box>
         </Container>
       </Box>
-      <ReviewModal room={room?._id} boardingHouse={room?.boardingHouse?._id} />
+      <Review
+        setReviewModal={setReviewModal}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
+      <ReviewModal
+        room={room?._id}
+        boardingHouse={room?.boardingHouse?._id}
+        open={reviewModal}
+        closeModal={closeModal}
+      />
       <ToastContainer
         position="top-right"
         autoClose={100}

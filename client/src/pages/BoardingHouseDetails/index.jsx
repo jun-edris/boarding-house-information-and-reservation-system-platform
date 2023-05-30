@@ -10,6 +10,7 @@ import {
   Box,
   Button,
   Card,
+  CardContent,
   CardMedia,
   Chip,
   Container,
@@ -34,13 +35,11 @@ const BoardingHouseDetails = () => {
   const [bHouse, setBHouse] = useState({});
   const [selectedMenu, setSelectedMenu] = useState('');
   const [openAgreementPopup, setOpenAgreementPopup] = useState(false);
-  const [showRoomDetails, setShowRoomDetails] = useState(false);
-  const [room, setRoom] = useState({} || null);
   const [openPopup, setOpenPopup] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [room, setRoom] = useState({});
 
   const handleModalClose = () => {
-    setShowRoomDetails(false);
     setOpenPopup(false);
   };
 
@@ -127,10 +126,11 @@ const BoardingHouseDetails = () => {
         <Box>
           <Box
             sx={{
-              background: `url(/home.jpg)`,
+              background: `url(/logo.png)`,
               height: 500,
-              backgroundSize: 'cover',
+              backgroundSize: 'contain',
               backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
@@ -151,7 +151,7 @@ const BoardingHouseDetails = () => {
             maxWidth="xl"
             sx={{ mt: '-420px', zIndex: 2, position: 'relative', pb: 10 }}
           >
-            <Box pt={5} pb={10}>
+            <Box pt={5}>
               <Box
                 mb={3}
                 mr="auto"
@@ -180,10 +180,11 @@ const BoardingHouseDetails = () => {
                     gap: 2,
                   }}
                 >
-                  {authContext.authState.userInfo.noBH && (
+                  {/* {authContext.authState.userInfo.noBH && (
                     <Button
                       variant="contained"
                       color="secondary"
+                      size="large"
                       disabled={
                         authContext.authState.userInfo.status ===
                           'requestedToReserve' ||
@@ -204,13 +205,14 @@ const BoardingHouseDetails = () => {
                         ? 'Already Living'
                         : 'Reserve a room'}
                     </Button>
-                  )}
+                  )} */}
                   {authContext.authState.userInfo.noBH &&
                     authContext.authState.userInfo.status ===
                       'requestedToReserve' && (
                       <Button
                         variant="contained"
                         color="error"
+                        size="large"
                         disabled={
                           authContext.authState.userInfo.status === ''
                             ? true
@@ -255,7 +257,7 @@ const BoardingHouseDetails = () => {
                           })
                           .map((room, index) => {
                             return (
-                              <Grid item key={index} xs={12} lg={4}>
+                              <Grid item key={index} xs={12} md={6} lg={4}>
                                 <Card>
                                   {room?.image ? (
                                     <CardMedia
@@ -281,9 +283,14 @@ const BoardingHouseDetails = () => {
                   </Grid>
 
                   <Box mt={1}>
-                    <Grid container spacing={2} alignItems="stretch">
+                    <Grid
+                      container
+                      spacing={2}
+                      alignItems="stretch"
+                      justifyContent="flex-start"
+                    >
                       <Grid item xs={12} lg={9}>
-                        <Paper variant="outlined" sx={{ p: 2 }}>
+                        <Paper variant="outlined" sx={{ p: 2, height: '100%' }}>
                           <Typography variant="h5" component="h6">
                             {bHouse?.houseName}
                           </Typography>
@@ -344,17 +351,17 @@ const BoardingHouseDetails = () => {
                               Phone: 0{bHouse?.owner?.contact}
                             </Typography>
                           </Box>
+                          <Box mt={2}>
+                            <Alert severity="info" sx={{ height: '100%' }}>
+                              <AlertTitle>
+                                Address where you can pay your rent.
+                              </AlertTitle>
+                              {bHouse?.landmark}
+                            </Alert>
+                          </Box>
                         </Paper>
                       </Grid>
                     </Grid>
-                    <Box mt={2}>
-                      <Alert severity="info">
-                        <AlertTitle>
-                          Landmark where you can pay your rent.
-                        </AlertTitle>
-                        {bHouse?.landmark}
-                      </Alert>
-                    </Box>
                   </Box>
                 </Grid>
               </Grid>
@@ -362,41 +369,143 @@ const BoardingHouseDetails = () => {
               <Divider />
               <Paper variant="outlined" sx={{ p: 3, marginTop: 4 }}>
                 <Typography variant="h4" sx={{ marginBottom: 3 }}>
-                  Rooms Available
+                  Rooms
                 </Typography>
                 <Grid container spacing={2}>
                   {bHouse?.rooms?.map((room, index) => {
                     return (
-                      <Grid item key={index} xs={12} md={3} lg={3}>
+                      <Grid item xs={12} md={6} lg={3} key={index}>
                         <Card
                           sx={{
-                            boxShadow: 'none',
-                            '&:hover': {
-                              cursor: 'pointer',
-                            },
+                            height: '100%',
+                            cursor:
+                              room.tenants.length === room.allowedTenants ||
+                              !authContext.authState.userInfo.noBH
+                                ? 'default'
+                                : 'pointer', // cursor is set to default if tenants are fully rented
                           }}
                           onClick={() => {
-                            setRoom(room);
-                            setSelectedMenu('Room Details');
-                            setShowRoomDetails(true);
+                            if (
+                              room.tenants.length !== room.allowedTenants &&
+                              authContext.authState.userInfo.noBH
+                            ) {
+                              setOpenAgreementPopup(true);
+                              setRoom(room);
+                            }
+
+                            // if (
+                            //   room.tenants.length !== room.allowedTenants &&
+                            //   authContext.authState.userInfo.noBH === false
+                            // ) {
+                            // }
                           }}
                         >
-                          {room?.image ? (
-                            <CardMedia
-                              component="img"
-                              height="270"
-                              width="350"
-                              image={room?.image}
-                              alt={bHouse?.houseName}
-                              sx={{
-                                borderRadius: '7%',
-                              }}
-                            />
-                          ) : (
-                            <Box height={270} width={350}>
-                              <Typography variant="body2">No image</Typography>
+                          <CardMedia
+                            sx={{ height: 200 }}
+                            image={room.image}
+                            title={room.type}
+                          />
+                          <CardContent>
+                            <Box mb={1}>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'flex-start',
+                                  width: '100%',
+                                }}
+                              >
+                                <Box>
+                                  <Typography
+                                    gutterBottom
+                                    variant="h5"
+                                    component="h6"
+                                    sx={{ textTransform: 'capitalize' }}
+                                  >
+                                    {room?.roomName}
+                                  </Typography>
+                                  <Typography
+                                    gutterBottom
+                                    variant="caption"
+                                    component="span"
+                                    sx={{ textTransform: 'capitalize' }}
+                                  >
+                                    {room?.roomType}
+                                  </Typography>
+                                </Box>
+                                <Box>
+                                  <Chip
+                                    label={
+                                      room?.tenants.length > 0 &&
+                                      room?.tenants.length !==
+                                        room?.allowedTenants
+                                        ? 'Rented By Tenants'
+                                        : room?.tenants.length ===
+                                          room?.allowedTenants
+                                        ? 'Fully Rented'
+                                        : 'Vacant'
+                                    }
+                                    size="small"
+                                    color={
+                                      room?.tenants.length > 0 &&
+                                      room?.tenants.length !==
+                                        room?.allowedTenants
+                                        ? 'warning'
+                                        : room?.tenants.length ===
+                                          room?.allowedTenants
+                                        ? 'error'
+                                        : 'success'
+                                    }
+                                  />
+                                </Box>
+                              </Box>
                             </Box>
-                          )}
+                            <Box my={2}>
+                              <Typography
+                                variant="body1"
+                                component="pre"
+                                sx={{
+                                  whiteSpace: 'pre-wrap',
+                                  textOverflow: 'ellipsis',
+                                }}
+                              >
+                                {room.description}
+                              </Typography>
+                            </Box>
+                            <Alert
+                              severity="info"
+                              variant="outlined"
+                              icon={false}
+                              sx={{ width: '100%' }}
+                            >
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  gap: 2,
+                                  width: '100%',
+                                  justifyContent: 'space-between',
+                                }}
+                              >
+                                <Box>
+                                  <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                  >
+                                    Allowed Tenants:{' '}
+                                    <strong>{room.allowedTenants}</strong>
+                                  </Typography>
+                                </Box>
+                                <Box>
+                                  <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                  >
+                                    Price: <strong>₱{room.prize}</strong>
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            </Alert>
+                          </CardContent>
                         </Card>
                       </Grid>
                     );
@@ -407,14 +516,13 @@ const BoardingHouseDetails = () => {
             <Divider />
             <Box mt={4} mb={4}>
               <Paper variant="outlined" sx={{ p: 3 }}>
-                <Typography variant="h5" component="h6">
+                <Typography variant="h5" component="h6" sx={{ mb: 3 }}>
                   Boarding house feedback from the tenants
                 </Typography>
-                <Box>
+                <Box sx={{ overflowY: 'scroll', height: 350, pr: 3 }}>
                   {reviews?.map((review) => (
                     <Box key={review?._id}>
                       <Box
-                        mt={4}
                         pb={2}
                         sx={{
                           display: 'flex',
@@ -424,8 +532,19 @@ const BoardingHouseDetails = () => {
                         <Box>
                           <Avatar src={review?.tenant?.image} />
                         </Box>
-                        <Box>
-                          <Box sx={{ display: 'flex', gap: 2 }}>
+                        <Box
+                          sx={{
+                            width: '100%',
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              gap: 2,
+                              justifyContent: 'space-between',
+                              width: '100%',
+                            }}
+                          >
                             <Typography
                               variant="body1"
                               sx={{ textTransform: 'capitalize' }}
@@ -437,10 +556,11 @@ const BoardingHouseDetails = () => {
                               count={5}
                               value={review?.rating}
                               edit={false}
-                              size={16}
+                              size={20}
                               color2="#ffd700"
                             />
                           </Box>
+
                           <Typography
                             variant="caption"
                             sx={{
@@ -450,12 +570,21 @@ const BoardingHouseDetails = () => {
                           >
                             {review?.room?.roomName}
                           </Typography>
-                          <Typography variant="body2" sx={{ marginTop: 2 }}>
-                            {review?.description}
-                          </Typography>
+                          <Box
+                            sx={{
+                              mt: 1,
+                              backgroundColor: '#eeeeee',
+                              borderRadius: 1,
+                              py: 3,
+                              px: 3,
+                            }}
+                          >
+                            <Typography variant="body2">
+                              {review?.description}
+                            </Typography>
+                          </Box>
                         </Box>
                       </Box>
-                      <Divider />
                     </Box>
                   ))}
                 </Box>
@@ -648,7 +777,7 @@ const BoardingHouseDetails = () => {
             </Box>
           </UserAgreement>
         </DialogContainer>
-        <DialogContainer
+        {/* <DialogContainer
           title={selectedMenu}
           open={showRoomDetails}
           onClose={handleModalClose}
@@ -685,7 +814,7 @@ const BoardingHouseDetails = () => {
                   label={
                     room?.tenants?.length === room?.allowedTenants
                       ? 'Fully Booked'
-                      : room?.tenants.length > 0 &&
+                      : room?.tenants.length > 0 ||
                         room?.tenants.length !== room?.allowedTenants
                       ? 'Partially Booked'
                       : 'Available'
@@ -716,16 +845,19 @@ const BoardingHouseDetails = () => {
               </Typography>
             </Grid>
           </Grid>
-        </DialogContainer>
+        </DialogContainer> */}
         <DialogContainer
           title={selectedMenu}
           open={openPopup}
+          cusWid="md"
           onClose={handleModalClose}
         >
           <ReserveForm
             rooms={bHouse?.rooms?.filter(
               (room) => room?.allowedTenants !== room?.tenants?.length
             )}
+            selectedRoom={room}
+            open={openPopup}
             onClose={handleModalClose}
           />
         </DialogContainer>

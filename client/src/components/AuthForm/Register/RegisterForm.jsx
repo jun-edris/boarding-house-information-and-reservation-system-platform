@@ -283,6 +283,7 @@ const RegisterForm = ({ onClose, user }) => {
           lastName: user ? user.lastName : '',
           email: user ? user.email : '',
           contact: user ? user.contact : '',
+          parent: user ? user.parent : '',
           region: '',
           province: '',
           city: '',
@@ -306,6 +307,7 @@ const RegisterForm = ({ onClose, user }) => {
               lastName,
               email,
               contact,
+              parent,
               password,
               role,
             } = values;
@@ -317,12 +319,13 @@ const RegisterForm = ({ onClose, user }) => {
                 lastName,
                 email,
                 contact,
-                image,
+                parent,
                 region: user?.region,
                 province: user?.province,
                 city: user?.city,
                 barangay: user?.barangay,
                 role: user?.role,
+                image,
               };
 
               updateUser(updateData);
@@ -343,6 +346,7 @@ const RegisterForm = ({ onClose, user }) => {
                 lastName,
                 email,
                 contact,
+                parent,
                 region: reg,
                 province: prov,
                 city: cit,
@@ -409,7 +413,9 @@ const RegisterForm = ({ onClose, user }) => {
                             onChange={handleChange}
                             name="role"
                           >
-                            <MenuItem value="landlord">Landlord</MenuItem>
+                            <MenuItem value="landlord">
+                              Boarding House Owner
+                            </MenuItem>
                             <MenuItem value="tenant">Tenant</MenuItem>
                           </Select>
                         </FormControl>
@@ -522,6 +528,21 @@ const RegisterForm = ({ onClose, user }) => {
                           <InputAdornment position="start">+63</InputAdornment>
                         ),
                       }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      error={Boolean(touched.parent && errors.parent)}
+                      fullWidth
+                      margin="dense"
+                      helperText={touched.parent && errors.parent}
+                      label="Parent/Guardian"
+                      name="parent"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      type="parent"
+                      value={values.parent}
+                      variant="filled"
                     />
                   </Grid>
                 </Grid>

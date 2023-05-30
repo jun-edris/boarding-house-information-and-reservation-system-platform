@@ -21,8 +21,8 @@ export const pendingReserve = [
   { id: 'status', label: 'Status' },
   { id: 'name', label: 'Name' },
   { id: 'room', label: 'Room' },
-  { id: 'dateToLive', label: 'Date to Live' },
-  { id: 'dateToLeave', label: 'Date to Leave' },
+  { id: 'dateToLive', label: 'Start of Stay (Date)' },
+  { id: 'dateToLeave', label: 'End of Stay (Date)' },
 ];
 
 const useStyles = makeStyles(() => ({
@@ -92,7 +92,7 @@ const ExpiredReservation = () => {
     <>
       <Box>
         <Paper sx={{ p: 3 }}>
-          <Typography variant="h4">Expired Reservation</Typography>
+          <Typography variant="h4">Ended Reservation</Typography>
           <TableContainer component={Paper} sx={{ mt: 3 }}>
             <Table className={classes.table}>
               <TableHead>
@@ -102,6 +102,7 @@ const ExpiredReservation = () => {
                       className={classes.headerCell}
                       key={req.id}
                       align="center"
+                      sx={{ color: 'white' }}
                     >
                       {req.label}
                     </TableCell>
@@ -115,7 +116,7 @@ const ExpiredReservation = () => {
                   return (
                     <TableRow key={pending?._id}>
                       <TableCell className={classes.cell} align="center">
-                        <Chip label={pending?.status} color="success" />
+                        <Chip label={pending?.status} color="error" />
                       </TableCell>
                       <TableCell className={classes.cell} align="center">
                         {pending?.tenant?.firstName} {pending?.tenant?.lastName}

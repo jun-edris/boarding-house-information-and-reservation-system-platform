@@ -1,5 +1,5 @@
 import Pusher from 'pusher-js';
-import { useState, createContext } from 'react';
+import { useState, createContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 const { Provider } = AuthContext;
@@ -7,6 +7,14 @@ const { Provider } = AuthContext;
 const AuthProvider = ({ children }) => {
   const userInfo = localStorage.getItem('userInfo');
   const expiresAt = localStorage.getItem('expiresAt');
+  const [showModalLater, setShowModalLater] = useState(false);
+
+  useEffect(() => {
+    const storedState = localStorage.getItem('showModalLater');
+    if (storedState) {
+      return setShowModalLater(JSON.parse(storedState));
+    }
+  }, []);
 
   const pusher = new Pusher(process.env.REACT_APP_APP_KEY, {
     cluster: process.env.REACT_APP_CLUSTER,
@@ -30,6 +38,7 @@ const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('expiresAt');
+    localStorage.removeItem('showModalLater');
     pusher.disconnect();
     setAuthState({
       token: null,
@@ -58,6 +67,8 @@ const AuthProvider = ({ children }) => {
         isTenant,
         isAdmin,
         isAuthorized,
+        showModalLater,
+        setShowModalLater,
         pusher,
       }}
     >

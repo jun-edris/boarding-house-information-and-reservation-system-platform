@@ -65,9 +65,7 @@ const userCtrl = {
   },
   getOneRoom: async (req, res) => {
     try {
-      const room = await Room.findOne({
-        owner: req.params.id,
-      });
+      const room = await Room.findById(req.params.id);
 
       res.status(200).json({
         room,
@@ -136,6 +134,7 @@ const userCtrl = {
     try {
       const notif = await Notification.find({
         user: req.user.sub,
+        new: true,
       })
         .populate('made')
         .populate('user');
@@ -150,7 +149,7 @@ const userCtrl = {
   },
   notifyLandlord: async (req, res) => {
     try {
-      const { roomId, type } = req.body;
+      const { roomId, type, reason } = req.body;
 
       const boardingHouse = await BoardingHouse.findOne({ rooms: roomId });
 
@@ -178,7 +177,7 @@ const userCtrl = {
       const newNotif = new Notification(notifData);
       await newNotif.save();
 
-      pusher.trigger('notify', 'notify-landlord', newNotif);
+      pusher.trigger('notify', 'notify-landlord-deleted-BH', newNotif);
       return res.status(201).json({
         msg: 'Notified!',
         notif: newNotif,
@@ -224,7 +223,7 @@ const userCtrl = {
   },
   reserveRoom: async (req, res) => {
     try {
-      const { roomId, dateToLive, dateToLeave } = req.body;
+      const { roomId, dateToLive, modeOfLiving } = req.body;
 
       const room = await Room.findById(roomId);
 
@@ -242,7 +241,7 @@ const userCtrl = {
       const reservationData = {
         room: roomId,
         dateToLive,
-        dateToLeave,
+        modeOfLiving,
         boardingHouseOwner: boardingHouse?.owner,
         tenant: req.user.sub,
       };
@@ -370,7 +369,6 @@ const userCtrl = {
   },
   notifRead: async (req, res) => {
     try {
-      // check if the allowed Tenants is equal to the number or tenants
       const notif = await Notification.findById(req.params.id);
 
       if (!notif)

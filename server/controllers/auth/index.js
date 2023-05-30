@@ -12,6 +12,7 @@ const authCtrl = {
         lastName,
         email,
         contact,
+        parent,
         region,
         province,
         city,
@@ -26,29 +27,31 @@ const authCtrl = {
         contact,
       });
 
-      if (existingUser)
+      if (existingUser) {
         return res.status(400).json({ msg: 'User already registered' });
+      } else {
+        const passwordHash = await bcrypt.hash(password, 12);
 
-      const passwordHash = await bcrypt.hash(password, 12);
+        const newUser = new Users({
+          firstName,
+          middleName,
+          lastName,
+          email: email.toLowerCase(),
+          contact,
+          parent,
+          password: passwordHash,
+          region,
+          province,
+          city,
+          barangay,
+          image,
+          role,
+        });
 
-      const newUser = new Users({
-        firstName,
-        middleName,
-        lastName,
-        email: email.toLowerCase(),
-        contact,
-        password: passwordHash,
-        region,
-        province,
-        city,
-        barangay,
-        image,
-        role,
-      });
+        await newUser.save();
 
-      await newUser.save();
-
-      res.status(201).json({ msg: 'Successfully Registered!' });
+        return res.status(201).json({ msg: 'Successfully Registered!' });
+      }
     } catch (error) {
       console.log(error);
       res.status(400).json({ msg: error.message });
@@ -62,6 +65,7 @@ const authCtrl = {
         lastName,
         email,
         contact,
+        parent,
         region,
         province,
         city,
@@ -78,6 +82,7 @@ const authCtrl = {
           lastName,
           email,
           contact,
+          parent,
           region,
           province,
           city,
@@ -88,7 +93,7 @@ const authCtrl = {
         {
           new: true,
           select:
-            'firstName middleName lastName email contact region province city barangay role image active noBH reviewed status',
+            'firstName middleName lastName email contact parent region province city barangay role active noBH reviewed status image',
         }
       );
       console.log(updatedUser);
@@ -142,6 +147,41 @@ const authCtrl = {
 
       return res.status(200).json({ msg: 'Logged Out' });
     } catch (error) {
+      res.status(400).json({ msg: error.message });
+    }
+  },
+  changePassword: async (req, res) => {
+    try {
+      const { email, password, confirmPass } = req.body;
+
+      if (password !== confirmPass) {
+        return res.status(400).json({ msg: 'Password does not match!' });
+      }
+
+      const existingEmail = Users.findOne({ email: email });
+
+      if (!existingEmail) {
+        return res.status(400).json({ msg: 'Email does not exist!' });
+      }
+
+      const passwordHash = await bcrypt.hash(password, 12);
+
+      const changedPass = await Users.findOneAndUpdate(
+        { email },
+        {
+          password: passwordHash,
+        }
+      );
+
+      if (!changedPass) {
+        return res.status(400).json({ msg: 'Password not changed!' });
+      }
+
+      return res
+        .status(200)
+        .json({ success: true, msg: 'Password change success' });
+    } catch (error) {
+      console.log(error);
       res.status(400).json({ msg: error.message });
     }
   },
